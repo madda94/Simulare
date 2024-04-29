@@ -1,0 +1,102 @@
+* {
+    margin: 0;
+    padding: 0;
+    font-size: 10px;
+}
+
+body {
+    background: rgb(141, 141, 243);
+    width: 100vh;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.card {
+    display: block;
+    position: absolute;
+    background-color: white;
+    padding: 5rem;
+    max-width: 50%;
+    text-align: center;
+    border-radius: 15px;
+    z-index: 1001;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+h1 {
+    font-size: 5rem;
+}
+
+button {
+    max-width: 80%;
+    padding: 1.5rem 6rem;
+    font-size: 3.5rem;
+    background-color: rgb(207, 201, 201);
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.buttons {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    justify-items: center;
+    gap: 5rem;
+    margin: 4rem 1rem;
+}
+
+.start {
+    position: absolute;
+    left: 50%;
+    top: 5%;
+    transform: translateX(-50%);
+    display: none;
+    font-size: 2.5rem;
+    padding: 1rem 4rem;
+    z-index: 1001;
+}
+
+canvas {
+    background-color: aliceblue;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+img {
+    display: none;
+}
+
+.npr2 {
+    position: absolute;
+    top: 550px;
+    left: 400px;
+    max-width: 25%;
+}
+
+#p22LightHead {
+    z-index: 1100;
+}
+
+.btns-scenarii {
+    display: none;
+    position: absolute;
+    top: 2%;
+    left: 1%;
+    margin: 0;
+    text-align: center;
+
+}
+
+.btn-scenariu {
+    padding: 1rem 3rem;
+    text-align: center;
+}
+
+.btn-scenariu-selected {
+    background-color: #706969;
+    color: aliceblue;
+}
