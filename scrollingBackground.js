@@ -7,19 +7,28 @@ export class Background {
 		this.width = 2400;
 		this.height = 800;
 		this.speed = 10;
-		this.image = backgroundImage;
+		// this.image = backgroundImage;
 		this.moving = false;
 		this.marks = new Marks(this);
+		this.color = 'rgba(0, 0, 0, 0)';
 	}
 	draw(context) {
-		context.drawImage(this.image, this.x, this.y, this.width, this.height);
-		context.drawImage(
-			this.image,
-			this.x + this.width - this.speed,
-			this.y,
-			this.width,
-			this.height
-		);
+		// context.drawImage(this.image, this.x, this.y, this.width, this.height);
+		context.fillStyle = this.color;
+		context.fillRect(this.x, this.y, this.width, this.height);
+		// context.strokeRect(
+		// 	this.x + this.width - this.speed,
+		// 	this.y,
+		// 	this.width,
+		// 	this.height
+		// );
+		// context.drawImage(
+		// 	this.image,
+		// 	this.x + this.width - this.speed,
+		// 	this.y,
+		// 	this.width,
+		// 	this.height
+		// );
 	}
 
 	update() {

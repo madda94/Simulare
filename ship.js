@@ -1,4 +1,4 @@
-import { MissileP21, MissileP22 } from './missile.js';
+import { MissileP21, MissileP22, FireAK630, Radar } from './missile.js';
 import { ArcDetection, ApproachDetection } from './approachLine.js';
 
 export class Ship {
@@ -28,7 +28,6 @@ export class Ship {
 		this.timeForNpr2 = false;
 	}
 	draw(context) {
-		if (this === undefined) console.log(this);
 		context.drawImage(
 			this.image,
 			0,
@@ -92,22 +91,26 @@ export class Fregata extends Ship {
 		this.simulare = simulare;
 		this.image = fregataImage;
 		this.spriteWidth = 232;
-		this.spriteHeight = 303;
+		this.spriteHeight = 348;
 		this.initialWidth = this.spriteWidth / 3.5;
 		this.width = this.spriteWidth / 1.4;
-		this.initialHeight = this.spriteHeight / 2.5;
-		this.height = this.spriteHeight * 1.1;
+		this.initialHeight = this.spriteHeight / 2;
+		this.height = this.spriteHeight;
 		this.initialX = this.initialWidth;
 		this.x = this.width / 4;
 		this.initialY = this.totalHeight / 2;
-		this.y = this.totalHeight / 2.2;
+		this.y = this.totalHeight / 2.4;
 		this.isDrawn = false;
 		this.radius = this.width * 4.25;
 		this.approachLines = new ArcDetection(this.simulare);
+		this.radar = new Radar(this.simulare);
+		this.fireAK630 = new FireAK630(this.simulare);
 	}
 	draw(context) {
 		super.draw(context);
 		this.drawApproachLine(context, this.approachLines, this.radius);
+		this.radar.draw(context);
+		this.fireAK630.draw(context);
 		this.isDrawn = true;
 	}
 	drawApproachLine(context, line, radius) {
@@ -117,7 +120,7 @@ export class Fregata extends Ship {
 	checkArcCollision(missile) {
 		const dx = missile.x - 0;
 		const dy = missile.y - this.approachLine.y;
-		const distance = Math.trunc(Math.sqrt(dx * dx + dy * dy)) + 150;
+		const distance = Math.trunc(Math.sqrt(dx * dx + dy * dy)) + 130;
 		const sumOfRadius = missile.radius + this.radius;
 		return distance < sumOfRadius;
 	}

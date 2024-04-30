@@ -14,7 +14,7 @@ class Missile {
 		this.speedY = 10;
 		this.frame = 1;
 		this.frameTime = 0;
-		this.frameInterval = 2000;
+		this.frameInterval = 3000;
 		this.moveDown = false;
 		this.updatedPosition = false;
 		this.radius = this.width / 2;
@@ -45,8 +45,8 @@ class Missile {
 		}
 	}
 	updatePosition() {
-		this.spriteWidth = 353.5;
-		this.spriteHeight = 353;
+		this.spriteWidth = 239.5;
+		this.spriteHeight = 187;
 		this.moveDown = true;
 		this.y = 0;
 		this.updatedPosition = true;
@@ -95,5 +95,63 @@ export class MissileP22 extends Missile {
 		super.updatePosition();
 		this.image = p22Down;
 		this.x = this.totalWidth - 3 * this.width;
+	}
+}
+
+export class FireAK630 extends Missile {
+	constructor(simulare) {
+		super(simulare);
+		this.x = this.simulare.width / 6.3;
+		this.y = this.simulare.height / 1.8;
+		this.image = fireReaction;
+	}
+	draw(context) {
+		context.drawImage(this.image, this.x, this.y, this.width, this.height);
+	}
+}
+
+export class Radar {
+	constructor(simulare) {
+		this.simulare = simulare;
+		this.image = radar;
+		this.spriteWidth = 129.4;
+		this.spriteHeight = 96.25;
+		this.width = this.spriteWidth / 2;
+		this.height = this.spriteHeight / 2;
+		this.frameX = 0;
+		this.maxFrameX = 4;
+		this.maxFrameY = 3;
+		this.frameY = 0;
+		this.frameCount = 0;
+		this.frameInterval = 15;
+		this.x = this.simulare.width / 7.2;
+		this.y = this.simulare.height / 1.84;
+	}
+	draw(context) {
+		context.drawImage(
+			this.image,
+			this.frameX * this.spriteWidth,
+			this.frameY * this.spriteHeight,
+			this.spriteWidth,
+			this.spriteHeight,
+			this.x,
+			this.y,
+			this.width,
+			this.height
+		);
+	}
+	update() {
+		this.frameCount++;
+		if (this.frameCount > this.frameInterval) {
+			this.frameCount = 0;
+			this.frameX++;
+			if (this.frameX > this.maxFrameX) {
+				this.frameX = 0;
+				this.frameY++;
+				if (this.frameY > this.maxFrameY) {
+					this.frameY = 0;
+				}
+			}
+		}
 	}
 }

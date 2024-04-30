@@ -13,8 +13,8 @@ export class Simulare {
 		this.timeForFregata = false;
 		this.fregataArcCollision = false;
 		this.fps = 20;
-		this.zoomTime = 0;
 		this.zoomInterval = 1000 / this.fps;
+		this.zoomTime = 0;
 		this.scenariu1Time = false;
 		this.scenariu2Time = false;
 	}
@@ -64,6 +64,7 @@ export class Simulare {
 		);
 		if (this.ships[2].isDrawn)
 			this.checkFregataLineCollision(context, this.ships[0].missiles);
+		this.ships[2].radar.update();
 	}
 	initialDisplayS1(context) {
 		this.background.draw(context);
@@ -80,6 +81,7 @@ export class Simulare {
 		missiles.forEach((missile) => {
 			if (this.ships[2].checkArcCollision(missile)) {
 				this.fregataArcCollision = true;
+				clearTimeout(this.zoomTimeout);
 				if (this.zoomTime < this.zoomInterval) {
 					this.zoomIn(context);
 					this.zoomTime += 5;
@@ -118,6 +120,7 @@ export class Simulare {
 				missile.lightHeadMissile();
 				missile.update();
 			});
+
 		requestAnimationFrame(() => this.scenariu1(context));
 	}
 

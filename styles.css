@@ -5,7 +5,9 @@
 }
 
 body {
-    background: rgb(141, 141, 243);
+    /* background-image: url('background.jpg');
+    background-repeat: no-repeat;
+    background-size: cover; */
     width: 100vh;
     height: 100vh;
     overflow: hidden;
@@ -58,7 +60,9 @@ button {
 }
 
 canvas {
-    background-color: aliceblue;
+    background-image: url('background.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
     position: absolute;
     top: 0;
     left: 0;
