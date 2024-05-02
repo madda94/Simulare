@@ -15,7 +15,8 @@ export class Simulare {
 		this.shipFireParticles = [];
 		this.explosions = [];
 		this.timeForFregata = false;
-		this.fregataArcCollision = false;
+		this.fregataArcCollisionfirstAttack = false;
+		this.fregataArcCollisionsecondAttack = false;
 		this.fps = 20;
 		this.zoomInterval = 1000 / this.fps;
 		this.zoomTime = 0;
@@ -24,6 +25,9 @@ export class Simulare {
 		this.zoomedIn = false;
 		this.explosionCount = 0;
 		this.maxExplosions = 10;
+		this.explosionMissile = 1;
+		this.explosionShip = 2;
+		this.attackOver = false;
 	}
 	draw(context) {
 		context.clearRect(0, 0, this.width, this.height);
@@ -55,15 +59,16 @@ export class Simulare {
 				fire.update();
 				fire.draw(context);
 			});
-			if (!this.fregataArcCollision)
-				this.ships[0].missiles.forEach((missile) => {
-					missile.draw(context);
-					missile.update();
+			if (!this.fregataArcCollisionfirstAttack)
+				Object.keys(this.ships[0].missiles).forEach((key) => {
+					this.ships[0].missiles[key].draw(context);
+					this.ships[0].missiles[key].update();
 				});
-			else if (this.fregataArcCollision)
-				this.ships[0].missiles.forEach((missile) => {
-					missile.draw(context);
+			else if (this.fregataArcCollisionfirstAttack) {
+				Object.keys(this.ships[0].missiles).forEach((key) => {
+					this.ships[0].missiles[key].draw(context);
 				});
+			}
 			this.shipFireParticles.forEach((particle) => {
 				particle.draw(context);
 			});
@@ -100,7 +105,7 @@ export class Simulare {
 			(explosion) => !explosion.markedForDeletion
 		);
 		if (this.ships[2].isDrawn)
-			this.checkFregataLineCollision(context, this.ships[0].missiles);
+			this.checkFregataLineCollisionFirst(context, this.ships[0].missiles.p22);
 		this.ships[2].radar.update();
 	}
 	initialDisplayS1(context) {
@@ -114,22 +119,20 @@ export class Simulare {
 			});
 		}, 100);
 	}
-	checkFregataLineCollision(context, missiles) {
-		missiles.forEach((missile) => {
-			if (this.ships[2].checkArcCollision(missile)) {
-				this.fregataArcCollision = true;
-				if (this.zoomTime < this.zoomInterval) {
-					this.zoomIn(context);
-					this.zoomTime += 5;
-				}
-				if (this.explosionCount < this.maxExplosions) {
-					this.explosions.unshift(new Explosion(this, 500, 200));
-					this.explosionCount++;
-				}
+	checkFregataLineCollisionFirst(context, missile) {
+		if (this.ships[2].checkArcCollision(missile)) {
+			this.fregataArcCollisionfirstAttack = true;
+			if (this.zoomTime < this.zoomInterval) {
+				this.zoomIn(context);
+				this.zoomTime += 5;
 			}
-		});
+		}
 	}
-
+	checkFregataLineCollisionSecond(missile) {
+		if (this.ships[2].checkArcCollision(missile, 0)) {
+			this.fregataArcCollisionsecondAttack = true;
+		}
+	}
 	zoomIn(context) {
 		this.background.marks.markDistance *= 1.2;
 		this.ships[2].radius *= 1.045;
@@ -137,34 +140,99 @@ export class Simulare {
 		this.ships[2].y /= 1.1;
 		this.ships[2].height *= 1.04;
 		this.ships[2].draw(context);
-		this.ships[2].radar.draw(context);
-		this.ships[0].missiles.forEach((missile) => {
-			missile.x *= 1.042;
-			missile.y /= 1.2;
-			missile.width *= 1.02;
-			missile.height *= 1.02;
-			missile.draw(context);
+		Object.keys(this.ships[0].missiles).forEach((key) => {
+			this.ships[0].missiles[key].x *= 1.045;
+			this.ships[0].missiles[key].y /= 1.2;
+			this.ships[0].missiles[key].width *= 1.02;
+			this.ships[0].missiles[key].height *= 1.02;
+			this.ships[0].missiles[key].draw(context);
 		});
 		this.background.marks.draw(context);
 		this.scenariu1Time = true;
+		this.zoomedIn = true;
 		setTimeout(() => {
 			btnsScenarii.style.display = 'block';
 		}, 100);
 	}
+	controlMissiles(
+		context,
+		missile,
+		shipPos,
+		explosionX,
+		explosionY,
+		explosionSize
+	) {
+		if (missile && missile.x > shipPos) {
+			missile.draw(context);
+			missile.speedX = 1;
+			missile.speedY = 0.4;
+			missile.lightHeadMissile();
+			missile.x -= missile.speedX;
+			missile.y += missile.speedY;
+		} else if (missile && missile.x <= shipPos) {
+			if (this.explosionCount < this.maxExplosions) {
+				this.explosions.unshift(
+					new Explosion(this, explosionX, explosionY, explosionSize)
+				);
+				this.explosionCount++;
+				missile.markedForDeletion = true;
+			}
+		}
+	}
 
+	controlAttack(context, ship) {
+		if (ship.missiles.p21) {
+			this.controlMissiles(
+				context,
+				ship.missiles.p21,
+				this.ships[2].x + this.ships[2].width / 2,
+				ship.missiles.p21.x - this.ships[2].width / 3,
+				ship.missiles.p21.y - this.ships[2].height / 5,
+				this.explosionShip
+			);
+		}
+		if (ship.missiles.p22) {
+			this.controlMissiles(
+				context,
+				ship.missiles.p22,
+				this.ships[2].x + this.ships[2].width * 2,
+				ship.missiles.p22.x,
+				ship.missiles.p22.y,
+				this.explosionMissile
+			);
+		}
+
+		if (!this.ships[2].fireAK630[0].fireStop) {
+			this.ships[2].fireAK630[0].update(context);
+			this.ships[2].fireAK630[1].y = this.height / 2.1;
+			this.ships[2].fireAK630[1].update(context);
+		}
+		if (ship.missiles.p21 && ship.missiles.p21.markedForDeletion)
+			delete ship.missiles.p21;
+		if (ship.missiles.p22 && ship.missiles.p22.markedForDeletion)
+			delete ship.missiles.p22;
+
+		if (!Object.keys(ship.missiles).length) {
+			this.attackOver = true;
+		}
+	}
 	scenariu1(context) {
-		if (this.scenariu1Time)
-			this.ships[0].missiles.forEach((missile) => {
-				missile.draw(context);
-				missile.speedX = 1;
-				missile.speedY = 0.5;
-				missile.lightHeadMissile();
-				missile.update();
-			});
+		if (this.scenariu1Time) {
+			this.controlAttack(context, this.ships[0]);
+			if (this.attackOver) {
+				this.ships[1].updateMissilesPosition();
+				Object.keys(this.ships[1].missiles).forEach((key) => {
+					// this.ships[1].missiles[key].updateZoomed();
+					// this.ships[1].missiles[key].drawZoomed(context);
+					this.ships[1].missiles[key].width =
+						this.ships[1].missiles[key].zoomedWidth;
+					this.ships[1].missiles[key].height =
+						this.ships[1].missiles[key].zoomedHeight;
+				});
 
-		if (!this.ships[2].fireAK630.fireStop)
-			this.ships[2].fireAK630.update(context);
-
+				this.controlAttack(context, this.ships[1]);
+			}
+		}
 		requestAnimationFrame(() => this.scenariu1(context));
 	}
 

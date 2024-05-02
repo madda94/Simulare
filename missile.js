@@ -11,15 +11,18 @@ class Missile {
 		this.width = this.spriteWidth / 4;
 		this.height = this.spriteHeight / 4;
 		this.x = this.totalWidth / 2.7;
+		this.zoomedWidth = this.width * 1.22;
+		this.zoomedHeight = this.width * 1.22;
 		this.speedX = 10;
 		this.speedY = 10;
 		this.frame = 1;
 		this.frameTime = 0;
-		this.frameInterval = 3000;
+		this.frameInterval = 5000;
 		this.moveDown = false;
 		this.updatedPosition = false;
 		this.radius = this.width / 2;
 		this.explosions = [new Explosion(this)];
+		this.markedForDeletion = false;
 	}
 	draw(context) {
 		context.drawImage(
@@ -34,6 +37,19 @@ class Missile {
 			this.height
 		);
 	}
+	drawZoomed(context) {
+		context.drawImage(
+			this.image,
+			this.frame * this.spriteWidth,
+			0,
+			this.spriteWidth,
+			this.spriteHeight,
+			this.zoomedX,
+			this.zoomedY,
+			this.zoomedWidth,
+			this.zoomedHeight
+		);
+	}
 	update() {
 		if (!this.moveDown) {
 			this.x -= this.speedX;
@@ -44,6 +60,14 @@ class Missile {
 			this.speedY = 1.5;
 			this.x -= this.speedX;
 			this.y += this.speedY;
+		}
+	}
+	updateZoomed() {
+		if (this.moveDown) {
+			this.speedX = 1;
+			this.speedY = 0.4;
+			this.zoomedX -= this.speedX;
+			this.zoomedY += this.speedY;
 		}
 	}
 	updatePosition() {
@@ -84,13 +108,14 @@ class Missile {
 export class MissileP21 extends Missile {
 	constructor(simulare) {
 		super(simulare);
-		this.y = this.totalHeight - this.height - 115;
+		this.y = this.totalHeight - this.height - 90;
 		this.image = p21LightHead;
+		// this.limit = this.simulare.width / 6;
 	}
 	updatePosition() {
 		super.updatePosition();
 		this.image = p21Down;
-		this.x = this.totalWidth - 1.5 * this.width;
+		this.x = this.totalWidth - 2.5 * this.width;
 	}
 }
 
@@ -99,26 +124,29 @@ export class MissileP22 extends Missile {
 		super(simulare);
 		this.y = this.totalHeight - this.height - 75;
 		this.image = p22LightHead;
+		this.zoomedX = this.x * 1.63;
 	}
 	updatePosition() {
 		super.updatePosition();
 		this.image = p22Down;
-		this.x = this.totalWidth - 3 * this.width;
+		this.x = this.totalWidth - 3.5 * this.width;
 	}
 }
 
-export class FireAK630 extends Missile {
+export class FireAK630 {
 	constructor(simulare) {
-		super(simulare);
+		this.simulare = simulare;
+		this.totalWidth = this.simulare.width;
+		this.totalHeight = this.simulare.height;
 		this.spriteWidth = 238;
 		this.spriteHeight = 260;
 		this.width = this.spriteWidth / 5;
 		this.height = this.spriteHeight / 5;
 		this.x = this.simulare.width / 5.8;
-		this.y = this.simulare.height / 1.65;
+		this.y = this.simulare.height / 2.2;
 		this.image = ak630img;
 		this.fireCount = 0;
-		this.maxFire = 10;
+		this.maxFire = 20;
 		this.fireInterval = 30;
 		this.fireTime = 0;
 		this.fireStop = this.fireCount > this.maxFire ? true : false;
@@ -137,7 +165,7 @@ export class FireAK630 extends Missile {
 		if (this.fireCount > this.maxFire) this.fireStop = true;
 	}
 	createSmokeReaction() {
-		for (let i = 0; i < 10; i++) {
+		for (let i = 0; i < 20; i++) {
 			this.simulare.smokeParticles.unshift(new Dust(this.simulare));
 		}
 	}
@@ -149,8 +177,8 @@ export class Radar {
 		this.image = radar;
 		this.spriteWidth = 129.4;
 		this.spriteHeight = 96.25;
-		this.width = this.spriteWidth / 2;
-		this.height = this.spriteHeight / 2;
+		this.width = this.spriteWidth / 2.2;
+		this.height = this.spriteHeight / 2.2;
 		this.frameX = 0;
 		this.maxFrameX = 4;
 		this.maxFrameY = 3;
@@ -158,7 +186,7 @@ export class Radar {
 		this.frameCount = 0;
 		this.frameInterval = 15;
 		this.x = this.simulare.width / 7.2;
-		this.y = this.simulare.height / 1.84;
+		this.y = this.simulare.height / 2.35;
 	}
 	draw(context) {
 		context.drawImage(

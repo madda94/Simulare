@@ -20,10 +20,10 @@ export class Ship {
 		this.image = nprImage;
 		this.approachLine = new ApproachDetection(this.simulare);
 		this.collisionLine;
-		this.missiles = [
-			new MissileP21(this.simulare),
-			new MissileP22(this.simulare),
-		];
+		this.missiles = {
+			p21: new MissileP21(this.simulare),
+			p22: new MissileP22(this.simulare),
+		};
 		this.updatedPosition = false;
 		this.markedForDeletion = false;
 		this.timeForNpr2 = false;
@@ -93,9 +93,9 @@ export class Ship {
 		}
 	}
 	updateMissilesPosition() {
-		this.missiles.forEach((missile) => {
-			if (!missile.updatedPosition) {
-				missile.updatePosition();
+		Object.keys(this.missiles).forEach((key) => {
+			if (!this.missiles[key].updatedPosition) {
+				this.missiles[key].updatePosition();
 			}
 		});
 	}
@@ -120,25 +120,29 @@ export class Fregata extends Ship {
 		this.radius = this.width * 4.25;
 		this.approachLines = new ArcDetection(this.simulare);
 		this.radar = new Radar(this.simulare);
-		this.fireAK630 = new FireAK630(this.simulare);
+		this.fireAK630 = [
+			new FireAK630(this.simulare),
+			new FireAK630(this.simulare),
+		];
+		this.zoomedIn = false;
 	}
 	draw(context) {
 		super.draw(context);
 		this.drawApproachLine(context, this.approachLines, this.radius);
 		this.isDrawn = true;
+		if (this.simulare.zoomedIn) this.radar.draw(context);
 	}
 	drawApproachLine(context, line, radius) {
 		line.appearBlinking = true;
 		line.draw(context, radius);
 	}
 	checkArcCollision(missile) {
-		const dx = missile.x - 0;
-		const dy = missile.y - this.approachLine.y;
-		const distance = Math.trunc(Math.sqrt(dx * dx + dy * dy)) + 130;
-		const sumOfRadius = missile.radius + this.radius;
-		return distance < sumOfRadius;
+		if (missile) {
+			const dx = missile.x - 0;
+			const dy = missile.y - this.approachLine.y;
+			const distance = Math.trunc(Math.sqrt(dx * dx + dy * dy)) + 130;
+			const sumOfRadius = missile.radius + this.radius;
+			return distance < sumOfRadius;
+		}
 	}
-	// fireCannonAK630() {
-	// 	this.fireAK630.update()
-	// }
 }
