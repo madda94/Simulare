@@ -1,4 +1,5 @@
 import { Fire, Dust } from './missileReaction.js';
+import { Explosion } from './explosions.js';
 
 class Missile {
 	constructor(simulare) {
@@ -7,8 +8,8 @@ class Missile {
 		this.totalHeight = this.simulare.height;
 		this.spriteWidth = 300;
 		this.spriteHeight = 300;
-		this.width = this.spriteWidth / 3;
-		this.height = this.spriteHeight / 3;
+		this.width = this.spriteWidth / 4;
+		this.height = this.spriteHeight / 4;
 		this.x = this.totalWidth / 2.7;
 		this.speedX = 10;
 		this.speedY = 10;
@@ -18,6 +19,7 @@ class Missile {
 		this.moveDown = false;
 		this.updatedPosition = false;
 		this.radius = this.width / 2;
+		this.explosions = [new Explosion(this)];
 	}
 	draw(context) {
 		context.drawImage(
@@ -39,7 +41,7 @@ class Missile {
 			this.createFireReaction();
 		} else if (this.moveDown) {
 			this.speedX = 3;
-			this.speedY = 1.4;
+			this.speedY = 1.5;
 			this.x -= this.speedX;
 			this.y += this.speedY;
 		}
@@ -62,13 +64,20 @@ class Missile {
 	}
 
 	createFireReaction() {
-		this.simulare.particles.unshift(
+		this.simulare.fireParticles.unshift(
 			new Fire(
 				this.simulare,
 				this.x + this.width * 0.9,
 				this.y + this.height * 0.6
 			)
 		);
+	}
+	createExplosion(context, timestamp) {
+		this.explosions = this.explosions.filter(
+			(explosion) => !explosion.markedForDeletion
+		);
+		if (this.explosions.length !== 0)
+			this.explosions.animate(context, timestamp);
 	}
 }
 
@@ -81,7 +90,7 @@ export class MissileP21 extends Missile {
 	updatePosition() {
 		super.updatePosition();
 		this.image = p21Down;
-		this.x = this.totalWidth - 2.5 * this.width;
+		this.x = this.totalWidth - 1.5 * this.width;
 	}
 }
 
@@ -101,12 +110,36 @@ export class MissileP22 extends Missile {
 export class FireAK630 extends Missile {
 	constructor(simulare) {
 		super(simulare);
-		this.x = this.simulare.width / 6.3;
-		this.y = this.simulare.height / 1.8;
-		this.image = fireReaction;
+		this.spriteWidth = 238;
+		this.spriteHeight = 260;
+		this.width = this.spriteWidth / 5;
+		this.height = this.spriteHeight / 5;
+		this.x = this.simulare.width / 5.8;
+		this.y = this.simulare.height / 1.65;
+		this.image = ak630img;
+		this.fireCount = 0;
+		this.maxFire = 10;
+		this.fireInterval = 30;
+		this.fireTime = 0;
+		this.fireStop = this.fireCount > this.maxFire ? true : false;
 	}
 	draw(context) {
 		context.drawImage(this.image, this.x, this.y, this.width, this.height);
+	}
+	update(context) {
+		if (this.fireTime < this.fireInterval) this.fireTime++;
+		else {
+			this.draw(context);
+			this.createSmokeReaction();
+			this.fireCount++;
+			this.fireTime = 0;
+		}
+		if (this.fireCount > this.maxFire) this.fireStop = true;
+	}
+	createSmokeReaction() {
+		for (let i = 0; i < 10; i++) {
+			this.simulare.smokeParticles.unshift(new Dust(this.simulare));
+		}
 	}
 }
 

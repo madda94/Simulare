@@ -1,5 +1,6 @@
 import { MissileP21, MissileP22, FireAK630, Radar } from './missile.js';
 import { ArcDetection, ApproachDetection } from './approachLine.js';
+import { ShipFire } from './missileReaction.js';
 
 export class Ship {
 	constructor(simulare) {
@@ -26,6 +27,7 @@ export class Ship {
 		this.updatedPosition = false;
 		this.markedForDeletion = false;
 		this.timeForNpr2 = false;
+		this.moveX = 0;
 	}
 	draw(context) {
 		context.drawImage(
@@ -40,11 +42,25 @@ export class Ship {
 			this.height
 		);
 	}
+	createFireReaction() {
+		for (let i = 0; i < 10; i++) {
+			this.simulare.shipFireParticles.unshift(
+				new ShipFire(this.simulare, this)
+			);
+		}
+	}
 	update() {
 		this.collisionLine = Math.trunc(this.x - this.approachLine.x + 20);
+		if (this.collisionLine <= 0) {
+			this.createFireReaction();
+		}
 		if (this.collisionLine <= -100) {
 			this.x += 8;
-		} else this.x -= 5;
+			this.moveX = 8;
+		} else {
+			this.x -= 5;
+			this.moveX = 5;
+		}
 	}
 	initialDraw(context) {
 		context.drawImage(
@@ -109,8 +125,6 @@ export class Fregata extends Ship {
 	draw(context) {
 		super.draw(context);
 		this.drawApproachLine(context, this.approachLines, this.radius);
-		this.radar.draw(context);
-		this.fireAK630.draw(context);
 		this.isDrawn = true;
 	}
 	drawApproachLine(context, line, radius) {
@@ -124,4 +138,7 @@ export class Fregata extends Ship {
 		const sumOfRadius = missile.radius + this.radius;
 		return distance < sumOfRadius;
 	}
+	// fireCannonAK630() {
+	// 	this.fireAK630.update()
+	// }
 }

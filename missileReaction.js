@@ -44,19 +44,61 @@ export class Fire extends Particle {
 }
 
 export class Dust extends Particle {
-	constructor(simulare, x, y) {
+	constructor(simulare) {
 		super(simulare);
-		this.size = Math.random() * 10 + 10;
-		this.x = x;
-		this.y = y;
-		this.speedX = Math.random();
-		this.speedY = Math.random();
-		this.color = 'rgba(0, 0, 0, 0.2)';
+		this.size = Math.random() * 10 + 30;
+		this.x = this.simulare.width / 5;
+		this.y = this.simulare.height / 1.5;
+		this.speedX = Math.random() + 2;
+		this.speedY = Math.random() * 2 - 2;
+		this.color = 'rgba(52, 58, 64, 0.15)';
 	}
 	draw(context) {
 		context.beginPath();
-		context.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+		context.arc(this.x, this.y, this.size / 2, 0, Math.PI * 2);
 		context.fillStyle = this.color;
 		context.fill();
+	}
+	update() {
+		if (this.x > this.simulare.width / 3) this.speedX = this.speedX * -1;
+		this.x += this.speedX;
+		this.y += this.speedY;
+		this.size *= 1.005;
+		if (this.size > 100) this.markedForDeletion = true;
+	}
+}
+
+export class ShipFire extends Particle {
+	constructor(simulare, ship) {
+		super(simulare);
+		this.ship = ship;
+		this.size = Math.random() * 5 + 5;
+		this.x = this.ship.x + this.ship.width / 2 + this.ship.moveX;
+		// this.x = this.simulare.width / 2.2
+		this.y = this.simulare.height / 1.2;
+		this.speedX = Math.random() + 1;
+		this.speedY = Math.random() - 1;
+		this.color1 = 'rgba(52, 58, 64, 0.15)';
+		this.color2 = 'rgba(255, 58, 64, 0.1)';
+		this.limitPoint = this.simulare.width / 2.5;
+	}
+	draw(context) {
+		context.beginPath();
+		context.arc(this.x, this.y, this.size / 2, 0, Math.PI * 2);
+		context.fillStyle = this.color1;
+		context.fill();
+		context.beginPath();
+		context.arc(this.x - 5, this.y, this.size / 2, 0, Math.PI * 2);
+		context.fillStyle = this.color2;
+		context.fill();
+	}
+	update() {
+		if (this.x < this.ship.x) {
+			this.speedX = this.speedX * -1;
+		}
+		this.x -= this.speedX;
+		this.y += this.speedY / 2;
+		this.size *= 1.01;
+		if (this.size > 50) this.markedForDeletion = true;
 	}
 }
