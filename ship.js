@@ -123,6 +123,8 @@ export class Fregata extends Ship {
 		this.fireAK630 = [
 			new FireAK630(this.simulare),
 			new FireAK630(this.simulare),
+			new FireAK630(this.simulare),
+			new FireAK630(this.simulare),
 		];
 		this.zoomedIn = false;
 	}

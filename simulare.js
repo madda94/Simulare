@@ -179,6 +179,13 @@ export class Simulare {
 			}
 		}
 	}
+	controlFireAK630(context, ak1, ak2) {
+		if (!ak1.fireStop) {
+			ak1.update(context);
+			ak2.y = this.height / 2.1;
+			ak2.update(context);
+		}
+	}
 
 	controlAttack(context, ship) {
 		if (ship.missiles.p21) {
@@ -201,12 +208,12 @@ export class Simulare {
 				this.explosionMissile
 			);
 		}
+		this.controlFireAK630(
+			context,
+			this.ships[2].fireAK630[0],
+			this.ships[2].fireAK630[1]
+		);
 
-		if (!this.ships[2].fireAK630[0].fireStop) {
-			this.ships[2].fireAK630[0].update(context);
-			this.ships[2].fireAK630[1].y = this.height / 2.1;
-			this.ships[2].fireAK630[1].update(context);
-		}
 		if (ship.missiles.p21 && ship.missiles.p21.markedForDeletion)
 			delete ship.missiles.p21;
 		if (ship.missiles.p22 && ship.missiles.p22.markedForDeletion)
@@ -219,11 +226,14 @@ export class Simulare {
 	scenariu1(context) {
 		if (this.scenariu1Time) {
 			this.controlAttack(context, this.ships[0]);
+			this.controlFireAK630(
+				context,
+				this.ships[2].fireAK630[0],
+				this.ships[2].fireAK630[1]
+			);
 			if (this.attackOver) {
 				this.ships[1].updateMissilesPosition();
 				Object.keys(this.ships[1].missiles).forEach((key) => {
-					// this.ships[1].missiles[key].updateZoomed();
-					// this.ships[1].missiles[key].drawZoomed(context);
 					this.ships[1].missiles[key].width =
 						this.ships[1].missiles[key].zoomedWidth;
 					this.ships[1].missiles[key].height =
@@ -231,6 +241,11 @@ export class Simulare {
 				});
 
 				this.controlAttack(context, this.ships[1]);
+				this.controlFireAK630(
+					context,
+					this.ships[2].fireAK630[2],
+					this.ships[2].fireAK630[3]
+				);
 			}
 		}
 		requestAnimationFrame(() => this.scenariu1(context));

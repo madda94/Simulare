@@ -146,7 +146,7 @@ export class FireAK630 {
 		this.y = this.simulare.height / 2.2;
 		this.image = ak630img;
 		this.fireCount = 0;
-		this.maxFire = 20;
+		this.maxFire = 40;
 		this.fireInterval = 30;
 		this.fireTime = 0;
 		this.fireStop = this.fireCount > this.maxFire ? true : false;
@@ -165,7 +165,7 @@ export class FireAK630 {
 		if (this.fireCount > this.maxFire) this.fireStop = true;
 	}
 	createSmokeReaction() {
-		for (let i = 0; i < 20; i++) {
+		for (let i = 0; i < 15; i++) {
 			this.simulare.smokeParticles.unshift(new Dust(this.simulare));
 		}
 	}

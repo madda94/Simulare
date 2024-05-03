@@ -5,30 +5,9 @@
 }
 
 body {
-    /* background-image: url('background.jpg');
-    background-repeat: no-repeat;
-    background-size: cover; */
     width: 100vh;
     height: 100vh;
     overflow: hidden;
-}
-
-.card {
-    display: block;
-    position: absolute;
-    background-color: white;
-    padding: 5rem;
-    max-width: 50%;
-    text-align: center;
-    border-radius: 15px;
-    z-index: 1001;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-}
-
-h1 {
-    font-size: 5rem;
 }
 
 button {
@@ -38,14 +17,6 @@ button {
     background-color: rgb(207, 201, 201);
     border-radius: 5px;
     cursor: pointer;
-}
-
-.buttons {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    justify-items: center;
-    gap: 5rem;
-    margin: 4rem 1rem;
 }
 
 .start {
@@ -70,29 +41,8 @@ button {
     height: 100%;
 }
 
-/* #canvas2 {
-    position: absolute;
-    border: 5px solid red;
-    top: 50%;
-    left: 30%;
-    transform: translate(-50%, -50%);
-    width: 30%;
-    height: 40%;
-} */
-
 img {
     display: none;
-}
-
-.npr2 {
-    position: absolute;
-    top: 550px;
-    left: 400px;
-    max-width: 25%;
-}
-
-#p22LightHead {
-    z-index: 1100;
 }
 
 .btns-scenarii {
