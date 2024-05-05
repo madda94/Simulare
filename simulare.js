@@ -12,6 +12,7 @@ export class Simulare {
 		this.ships = [new Ship(this), new Ship(this), new Fregata(this)];
 		this.fireParticles = [];
 		this.smokeParticles = [];
+		this.smokeParticlesAK726 = [];
 		this.shipFireParticles = [];
 		this.explosions = [];
 		this.timeForFregata = false;
@@ -46,6 +47,9 @@ export class Simulare {
 			particle.draw(context);
 		});
 		this.smokeParticles.forEach((particle) => {
+			particle.draw(context);
+		});
+		this.smokeParticlesAK726.forEach((particle) => {
 			particle.draw(context);
 		});
 	}
@@ -85,6 +89,9 @@ export class Simulare {
 		this.smokeParticles.forEach((particle) => {
 			particle.update();
 		});
+		this.smokeParticlesAK726.forEach((particle) => {
+			particle.update();
+		});
 		this.shipFireParticles.forEach((particle) => {
 			particle.update();
 		});
@@ -92,6 +99,9 @@ export class Simulare {
 			(particle) => !particle.markedForDeletion
 		);
 		this.smokeParticles = this.smokeParticles.filter(
+			(particle) => !particle.markedForDeletion
+		);
+		this.smokeParticlesAK726 = this.smokeParticlesAK726.filter(
 			(particle) => !particle.markedForDeletion
 		);
 		this.shipFireParticles = this.shipFireParticles.filter(
@@ -189,8 +199,9 @@ export class Simulare {
 	controlFireAK726(context, ak1, ak2) {
 		if (!ak1.fireStop) {
 			ak1.update(context);
-			ak2.x = this.width / 9.4;
-			ak2.y = this.height / 1.95;
+			ak2.fireInterval = 120;
+			ak2.x = this.width / 9.5;
+			ak2.y = this.height / 1.8;
 			ak2.update(context);
 		}
 	}
@@ -216,17 +227,11 @@ export class Simulare {
 				this.explosionMissile
 			);
 		}
-		this.controlFireAK630(
-			context,
-			this.ships[2].fireAK630[0],
-			this.ships[2].fireAK630[1]
-		);
-		this.controlFireAK726(
-			context,
-			this.ships[2].fireAK726[0],
-			this.ships[2].fireAK726[1]
-		);
-		
+		// this.controlFireAK630(
+		// 	context,
+		// 	this.ships[2].fireAK630[0],
+		// 	this.ships[2].fireAK630[1]
+		// );
 
 		if (ship.missiles.p21 && ship.missiles.p21.markedForDeletion)
 			delete ship.missiles.p21;

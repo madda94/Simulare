@@ -1,4 +1,4 @@
-import { Fire, Dust } from './missileReaction.js';
+import { Fire, Dust, SmokeAK726 } from './missileReaction.js';
 import { Explosion } from './explosions.js';
 
 class Missile {
@@ -177,34 +177,60 @@ export class FireAK726 {
 		this.totalHeight = this.simulare.height;
 		this.spriteWidth = 185;
 		this.spriteHeight = 170;
-		this.width = this.spriteWidth / 2;
-		this.height = this.spriteHeight/ 2;
+		this.width = this.spriteWidth / 2.5;
+		this.height = this.spriteHeight / 2.5;
 		this.x = this.simulare.width / 9;
-		this.y = this.simulare.height / 2.3;
+		this.y = this.simulare.height / 2.1;
+		this.moveX = this.x;
+		this.moveY = this.y;
+		this.speedX = 5;
+		this.speedY = 2.5;
 		this.image = ak726img;
 		this.fireCount = 0;
-		this.maxFire = 40;
-		this.fireInterval = 30;
+		this.maxFire = 7;
+		this.fireInterval = 100;
 		this.fireTime = 0;
 		this.fireStop = this.fireCount > this.maxFire ? true : false;
 	}
 	draw(context) {
-		context.drawImage(this.image, this.x, this.y, this.width, this.height);
+		this.createSmokeReaction();
+		context.drawImage(
+			this.image,
+			0,
+			0,
+			this.spriteWidth,
+			this.spriteHeight,
+			this.moveX,
+			this.moveY,
+			this.width,
+			this.height
+		);
 	}
 	update(context) {
-		if (this.fireTime < this.fireInterval) this.fireTime++;
-		else {
+		if (this.fireTime < this.fireInterval) {
+			if (this.moveX <= this.x + 250) {
+				this.moveX += this.speedX;
+				this.moveY -= this.speedY;
+				this.draw(context);
+			}
+			this.fireTime++;
+		} else {
+			this.moveX = this.x;
+			this.moveY = this.y;
 			this.draw(context);
-			this.createSmokeReaction();
 			this.fireCount++;
 			this.fireTime = 0;
 		}
 		if (this.fireCount > this.maxFire) this.fireStop = true;
 	}
 	createSmokeReaction() {
-		for (let i = 0; i < 15; i++) {
-			this.simulare.smokeParticles.unshift(new Dust(this.simulare));
-		}
+		this.simulare.smokeParticlesAK726.unshift(
+			new SmokeAK726(
+				this.simulare,
+				this.moveX + this.width,
+				this.moveY + this.height / 2
+			)
+		);
 	}
 }
 

@@ -68,19 +68,26 @@ export class Dust extends Particle {
 	}
 }
 
+export class SmokeAK726 extends Dust {
+	constructor(simulare, x, y) {
+		super(simulare);
+		this.x = x;
+		this.y = y;
+	}
+}
+
 export class ShipFire extends Particle {
 	constructor(simulare, ship) {
 		super(simulare);
 		this.ship = ship;
-		this.size = Math.random() * 10 + 5;
+		this.size = Math.random() * 10;
 		this.x = this.ship.x + this.ship.width / 2 + this.ship.moveX;
 		// this.x = this.simulare.width / 2.2
 		this.y = this.simulare.height / 1.2;
-		this.speedX = Math.random() + 1;
+		this.speedX = Math.random() * 2 - 0.5;
 		this.speedY = Math.random() - 1;
 		this.color1 = 'rgba(255, 102, 0, 0.8)';
 		this.color2 = 'rgba(141, 141, 124, 0.5)';
-		this.limitPoint = this.simulare.width / 2.5;
 	}
 	draw(context) {
 		context.beginPath();
@@ -93,12 +100,12 @@ export class ShipFire extends Particle {
 		context.fill();
 	}
 	update() {
-		if (this.x < this.ship.x) {
+		if (this.x < this.ship.x && this.x > this.ship.width) {
 			this.speedX = this.speedX * -1;
 		}
 		this.x -= this.speedX;
 		this.y += this.speedY / 2;
 		this.size *= 1.01;
-		if (this.size > 50) this.markedForDeletion = true;
+		if (this.size > 60) this.markedForDeletion = true;
 	}
 }

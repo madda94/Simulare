@@ -1,4 +1,10 @@
-import { MissileP21, MissileP22, FireAK630, FireAK726, Radar } from './missile.js';
+import {
+	MissileP21,
+	MissileP22,
+	FireAK630,
+	FireAK726,
+	Radar,
+} from './missile.js';
 import { ArcDetection, ApproachDetection } from './approachLine.js';
 import { ShipFire } from './missileReaction.js';
 
@@ -108,7 +114,7 @@ export class Fregata extends Ship {
 		this.image = fregataImage;
 		this.spriteWidth = 232;
 		this.spriteHeight = 348;
-		this.initialWidth = this.spriteWidth / 3.5;
+		this.initialWidth = this.spriteWidth / 3;
 		this.width = this.spriteWidth / 1.4;
 		this.initialHeight = this.spriteHeight / 2;
 		this.height = this.spriteHeight;
