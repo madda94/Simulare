@@ -1,4 +1,4 @@
-import { MissileP21, MissileP22, FireAK630, Radar } from './missile.js';
+import { MissileP21, MissileP22, FireAK630, FireAK726, Radar } from './missile.js';
 import { ArcDetection, ApproachDetection } from './approachLine.js';
 import { ShipFire } from './missileReaction.js';
 
@@ -125,6 +125,12 @@ export class Fregata extends Ship {
 			new FireAK630(this.simulare),
 			new FireAK630(this.simulare),
 			new FireAK630(this.simulare),
+		];
+		this.fireAK726 = [
+			new FireAK726(this.simulare),
+			new FireAK726(this.simulare),
+			new FireAK726(this.simulare),
+			new FireAK726(this.simulare),
 		];
 		this.zoomedIn = false;
 	}

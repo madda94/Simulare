@@ -170,6 +170,43 @@ export class FireAK630 {
 		}
 	}
 }
+export class FireAK726 {
+	constructor(simulare) {
+		this.simulare = simulare;
+		this.totalWidth = this.simulare.width;
+		this.totalHeight = this.simulare.height;
+		this.spriteWidth = 185;
+		this.spriteHeight = 170;
+		this.width = this.spriteWidth / 2;
+		this.height = this.spriteHeight/ 2;
+		this.x = this.simulare.width / 9;
+		this.y = this.simulare.height / 2.3;
+		this.image = ak726img;
+		this.fireCount = 0;
+		this.maxFire = 40;
+		this.fireInterval = 30;
+		this.fireTime = 0;
+		this.fireStop = this.fireCount > this.maxFire ? true : false;
+	}
+	draw(context) {
+		context.drawImage(this.image, this.x, this.y, this.width, this.height);
+	}
+	update(context) {
+		if (this.fireTime < this.fireInterval) this.fireTime++;
+		else {
+			this.draw(context);
+			this.createSmokeReaction();
+			this.fireCount++;
+			this.fireTime = 0;
+		}
+		if (this.fireCount > this.maxFire) this.fireStop = true;
+	}
+	createSmokeReaction() {
+		for (let i = 0; i < 15; i++) {
+			this.simulare.smokeParticles.unshift(new Dust(this.simulare));
+		}
+	}
+}
 
 export class Radar {
 	constructor(simulare) {

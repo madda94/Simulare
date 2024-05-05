@@ -186,6 +186,14 @@ export class Simulare {
 			ak2.update(context);
 		}
 	}
+	controlFireAK726(context, ak1, ak2) {
+		if (!ak1.fireStop) {
+			ak1.update(context);
+			ak2.x = this.width / 9.4;
+			ak2.y = this.height / 1.95;
+			ak2.update(context);
+		}
+	}
 
 	controlAttack(context, ship) {
 		if (ship.missiles.p21) {
@@ -213,6 +221,12 @@ export class Simulare {
 			this.ships[2].fireAK630[0],
 			this.ships[2].fireAK630[1]
 		);
+		this.controlFireAK726(
+			context,
+			this.ships[2].fireAK726[0],
+			this.ships[2].fireAK726[1]
+		);
+		
 
 		if (ship.missiles.p21 && ship.missiles.p21.markedForDeletion)
 			delete ship.missiles.p21;
@@ -231,6 +245,11 @@ export class Simulare {
 				this.ships[2].fireAK630[0],
 				this.ships[2].fireAK630[1]
 			);
+			this.controlFireAK726(
+				context,
+				this.ships[2].fireAK726[0],
+				this.ships[2].fireAK726[1]
+			);
 			if (this.attackOver) {
 				this.ships[1].updateMissilesPosition();
 				Object.keys(this.ships[1].missiles).forEach((key) => {
@@ -245,6 +264,11 @@ export class Simulare {
 					context,
 					this.ships[2].fireAK630[2],
 					this.ships[2].fireAK630[3]
+				);
+				this.controlFireAK726(
+					context,
+					this.ships[2].fireAK726[2],
+					this.ships[2].fireAK726[3]
 				);
 			}
 		}
