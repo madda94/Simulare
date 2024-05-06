@@ -29,6 +29,7 @@ export class Simulare {
 		this.explosionMissile = 1;
 		this.explosionShip = 2;
 		this.attackOver = false;
+		this.attackOverFinal = false;
 	}
 	draw(context) {
 		context.clearRect(0, 0, this.width, this.height);
@@ -276,8 +277,14 @@ export class Simulare {
 					this.ships[2].fireAK726[3]
 				);
 			}
+			if (
+				Object.keys(this.ships[0].missiles).length === 0 &&
+				Object.keys(this.ships[1].missiles).length === 0
+			)
+				this.attackOverFinal = true;
 		}
-		requestAnimationFrame(() => this.scenariu1(context));
+		if (!this.attackOverFinal)
+			requestAnimationFrame(() => this.scenariu1(context));
 	}
 
 	animate(context) {
