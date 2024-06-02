@@ -1,6 +1,7 @@
 import { Simulare } from './simulare.js';
 
 export const btnsScenarii = document.querySelector('.btns-scenarii');
+const btnContinue = document.getElementById('continue');
 const startBtn = document.querySelector('.start');
 const btnScenariu1 = document.getElementById('scenariu1');
 const btnScenariu2 = document.getElementById('scenariu2');
@@ -14,13 +15,20 @@ const simulare = new Simulare(canvas.width, canvas.height);
 
 window.addEventListener('load', () => {
 	simulare.background.draw(ctx);
-	simulare.initialDisplayS1(ctx);
+	simulare.initialDisplay(ctx);
 	startBtn.style.display = 'block';
 });
 
 startBtn.addEventListener('click', function () {
 	simulare.animate(ctx);
 	startBtn.style.display = 'none';
+	btnContinue.style.display = 'block';
+});
+
+btnContinue.addEventListener('click', function () {
+	if (simulare.continue) {
+		simulare.continue = false;
+	} else simulare.continue = true;
 });
 
 btnsScenarii.addEventListener('click', function (e) {

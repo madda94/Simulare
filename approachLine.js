@@ -32,7 +32,7 @@ export class ApproachDetection {
 		return this.blinking;
 	}
 	movingBack() {
-		this.x += 10;
+		this.x += this.simulare.speed * 10;
 	}
 }
 

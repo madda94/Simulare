@@ -1,4 +1,4 @@
-import { Fire, Dust, SmokeAK726 } from './missileReaction.js';
+import { Fire, Dust, SmokeAK726, Cloud, Cloud2 } from './missileReaction.js';
 import { Explosion } from './explosions.js';
 
 class Missile {
@@ -13,16 +13,17 @@ class Missile {
 		this.x = this.totalWidth / 2.7;
 		this.zoomedWidth = this.width * 1.22;
 		this.zoomedHeight = this.width * 1.22;
-		this.speedX = 10;
-		this.speedY = 10;
+		this.speedX = this.simulare.speed * 10;
+		this.speedY = this.simulare.speed * 10;
 		this.frame = 1;
 		this.frameTime = 0;
-		this.frameInterval = 5000;
+		this.frameInterval = 10000;
 		this.moveDown = false;
 		this.updatedPosition = false;
 		this.radius = this.width / 2;
 		this.explosions = [new Explosion(this)];
 		this.markedForDeletion = false;
+		this.deviat = false;
 	}
 	draw(context) {
 		context.drawImage(
@@ -50,22 +51,40 @@ class Missile {
 			this.zoomedHeight
 		);
 	}
+	drawAfterDeviation(context) {
+		context.save();
+		context.translate(this.x + this.width / 2, this.y + this.height / 2);
+		context.rotate(-Math.PI / 6.5);
+		context.translate(-this.width / 2, -this.height / 2);
+		context.drawImage(
+			this.image,
+			this.frame * this.spriteWidth,
+			0,
+			this.spriteWidth,
+			this.spriteHeight,
+			0,
+			0,
+			this.width,
+			this.height
+		);
+		context.restore();
+	}
 	update() {
 		if (!this.moveDown) {
 			this.x -= this.speedX;
 			this.y -= this.speedY;
 			this.createFireReaction();
 		} else if (this.moveDown) {
-			this.speedX = 3;
-			this.speedY = 1.5;
+			this.speedX = this.simulare.speed * 3;
+			this.speedY = this.simulare.speed * 1.5;
 			this.x -= this.speedX;
 			this.y += this.speedY;
 		}
 	}
 	updateZoomed() {
 		if (this.moveDown) {
-			this.speedX = 1;
-			this.speedY = 0.4;
+			this.speedX = this.simulare.speed;
+			this.speedY = this.simulare.speed * 0.4;
 			this.zoomedX -= this.speedX;
 			this.zoomedY += this.speedY;
 		}
@@ -110,7 +129,6 @@ export class MissileP21 extends Missile {
 		super(simulare);
 		this.y = this.totalHeight - this.height - 90;
 		this.image = p21LightHead;
-		// this.limit = this.simulare.width / 6;
 	}
 	updatePosition() {
 		super.updatePosition();
@@ -183,8 +201,8 @@ export class FireAK726 {
 		this.y = this.simulare.height / 2.1;
 		this.moveX = this.x;
 		this.moveY = this.y;
-		this.speedX = 5;
-		this.speedY = 2.5;
+		this.speedX = this.simulare.speed * 5;
+		this.speedY = this.simulare.speed * 2.5;
 		this.image = ak726img;
 		this.fireCount = 0;
 		this.maxFire = 7;
@@ -277,5 +295,137 @@ export class Radar {
 				}
 			}
 		}
+	}
+}
+
+export class FirePK16 {
+	constructor(simulare, x, y) {
+		this.simulare = simulare;
+		this.totalWidth = this.simulare.width;
+		this.totalHeight = this.simulare.height;
+		this.x = x;
+		this.width = 10;
+		this.height = 30;
+		this.y = y;
+		this.moveX = this.x;
+		this.moveY = this.y;
+		this.fireInterval = 150;
+		this.fireTime = 0;
+		this.speedX = this.simulare.speed * 5;
+		this.speedY = this.simulare.speed * 1.5;
+		this.color = 'black';
+		this.fireCount = 0;
+		this.maxFire = 6;
+		this.fireStop = false;
+		this.cloudDrawn = false;
+	}
+	draw(context) {
+		context.save();
+		context.beginPath();
+		context.translate(
+			this.moveX + this.width / 2,
+			this.moveY + this.height / 2
+		);
+		context.rotate(-Math.PI / 1.65);
+		context.translate(-this.width / 2, -this.height / 2);
+		context.fillStyle = this.color;
+		context.roundRect(0, 0, this.width, this.height, [0, 0, 5, 5]);
+		context.fill();
+		context.restore();
+	}
+
+	update(context) {
+		if (this.fireCount > this.maxFire) this.fireStop = true;
+		if (!this.fireStop) {
+			if (this.fireTime < this.fireInterval) {
+				if (this.moveX <= this.x + 200) {
+					this.moveX += this.speedX;
+					this.moveY -= this.speedY;
+					this.draw(context);
+				} else {
+					this.createCloud(this.moveX + 20, this.moveY + 20);
+				}
+				this.fireTime++;
+			} else {
+				this.fireCount++;
+				this.moveX = this.x;
+				this.moveY = this.y;
+				this.draw(context);
+				this.fireTime = 0;
+			}
+		}
+	}
+	createCloud(x, y) {
+		if (!this.cloudDrawn)
+			this.simulare.cloud.unshift(new Cloud(this.simulare, x, y));
+		this.cloudDrawn = true;
+		this.simulare.cloud.forEach((cloud) => {
+			if (cloud.markedForDeletion) this.cloudDrawn = false;
+		});
+	}
+}
+
+export class FirePK16_2 {
+	constructor(simulare, x, y) {
+		this.simulare = simulare;
+		this.totalWidth = this.simulare.width;
+		this.totalHeight = this.simulare.height;
+		this.x = x;
+		this.width = 10;
+		this.height = 30;
+		this.y = y;
+		this.moveX = this.x;
+		this.moveY = this.y;
+		this.fireInterval = 150;
+		this.fireTime = 0;
+		this.color = 'black';
+		this.fireCount = 0;
+		this.maxFire = 6;
+		this.fireStop = false;
+		this.cloudDrawn = false;
+		this.speedX = this.simulare.speed * 6;
+		this.speedY = this.simulare.speed * 0.5;
+		this.cloudDrawn = false;
+	}
+	draw(context) {
+		context.save();
+		context.beginPath();
+		context.translate(
+			this.moveX + this.width / 2,
+			this.moveY + this.height / 2
+		);
+		context.rotate(-Math.PI / 1.65);
+		context.translate(-this.width / 2, -this.height / 2);
+		context.fillStyle = this.color;
+		context.roundRect(0, 0, this.width, this.height, [0, 0, 5, 5]);
+		context.fill();
+		context.restore();
+	}
+
+	update(context) {
+		if (this.fireCount > this.maxFire) this.fireStop = true;
+		if (!this.fireStop) {
+			if (this.fireTime < this.fireInterval) {
+				if (this.moveX <= this.x + 200) {
+					this.moveX += this.speedX;
+					this.moveY -= this.speedY;
+					this.draw(context);
+				} else {
+					this.createCloud(this.moveX + 20, this.moveY + 20);
+					this.cloudDrawn = true;
+				}
+				this.fireTime++;
+			} else {
+				this.fireCount++;
+				this.moveX = this.x;
+				this.moveY = this.y;
+				this.draw(context);
+				this.fireTime = 0;
+			}
+		}
+	}
+	createCloud(x, y) {
+		if (!this.cloudDrawn)
+			this.simulare.cloud2.unshift(new Cloud2(this.simulare, x, y));
 	}
 }

@@ -3,6 +3,8 @@ import {
 	MissileP22,
 	FireAK630,
 	FireAK726,
+	FirePK16,
+	FirePK16_2,
 	Radar,
 } from './missile.js';
 import { ArcDetection, ApproachDetection } from './approachLine.js';
@@ -61,11 +63,11 @@ export class Ship {
 			this.createFireReaction();
 		}
 		if (this.collisionLine <= -100) {
-			this.x += 8;
-			this.moveX = 8;
+			this.x += this.simulare.speed * 8;
+			this.moveX = this.simulare.speed * 8;
 		} else {
-			this.x -= 5;
-			this.moveX = 5;
+			this.x -= this.simulare.speed * 5;
+			this.moveX = this.simulare.speed * 5;
 		}
 	}
 	initialDraw(context) {
@@ -138,6 +140,16 @@ export class Fregata extends Ship {
 			new FireAK726(this.simulare),
 			new FireAK726(this.simulare),
 		];
+		this.firePK16 = new FirePK16(
+			this.simulare,
+			this.x + this.width / 0.9,
+			this.y + this.height / 3.2
+		);
+		this.firePK16_2 = new FirePK16_2(
+			this.simulare,
+			this.x + this.width / 0.95,
+			this.y + this.height / 3.2
+		);
 		this.zoomedIn = false;
 	}
 	draw(context) {

@@ -7,7 +7,7 @@ export class Simulare {
 	constructor(width, height) {
 		this.width = width;
 		this.height = height;
-		this.speed = 0;
+		this.speed = 1;
 		this.background = new Background(this);
 		this.ships = [new Ship(this), new Ship(this), new Fregata(this)];
 		this.fireParticles = [];
@@ -15,9 +15,10 @@ export class Simulare {
 		this.smokeParticlesAK726 = [];
 		this.shipFireParticles = [];
 		this.explosions = [];
+		this.cloud = [];
+		this.cloud2 = [];
 		this.timeForFregata = false;
 		this.fregataArcCollisionfirstAttack = false;
-		this.fregataArcCollisionsecondAttack = false;
 		this.fps = 20;
 		this.zoomInterval = 1000 / this.fps;
 		this.zoomTime = 0;
@@ -30,6 +31,7 @@ export class Simulare {
 		this.explosionShip = 2;
 		this.attackOver = false;
 		this.attackOverFinal = false;
+		this.continue = true;
 	}
 	draw(context) {
 		context.clearRect(0, 0, this.width, this.height);
@@ -66,60 +68,87 @@ export class Simulare {
 			});
 			if (!this.fregataArcCollisionfirstAttack)
 				Object.keys(this.ships[0].missiles).forEach((key) => {
-					this.ships[0].missiles[key].draw(context);
+					if (!this.ships[0].missiles[key].deviat)
+						this.ships[0].missiles[key].draw(context);
+					else this.ships[0].missiles[key].drawAfterDeviation(context);
 					this.ships[0].missiles[key].update();
 				});
 			else if (this.fregataArcCollisionfirstAttack) {
 				Object.keys(this.ships[0].missiles).forEach((key) => {
-					this.ships[0].missiles[key].draw(context);
+					if (!this.ships[0].missiles[key].deviat)
+						this.ships[0].missiles[key].draw(context);
+					else this.ships[0].missiles[key].drawAfterDeviation(context);
 				});
 			}
+			if (this.attackOver)
+				Object.keys(this.ships[1].missiles).forEach((key) => {
+					this.ships[1].missiles[key].drawZoomed(context);
+					this.ships[1].missiles[key].updateZoomed();
+				});
 			this.shipFireParticles.forEach((particle) => {
 				particle.draw(context);
 			});
 		}
 	}
 	update(context) {
-		if (!this.ships[2].isDrawn) this.background.update();
-		if (!this.ships[0].markedForDeletion) this.ships[0].controlNpr(context);
-		this.controlAfterFirstCollision(context);
-		// handle missile reaction
-		this.fireParticles.forEach((particle) => {
-			particle.update();
-		});
-		this.smokeParticles.forEach((particle) => {
-			particle.update();
-		});
-		this.smokeParticlesAK726.forEach((particle) => {
-			particle.update();
-		});
-		this.shipFireParticles.forEach((particle) => {
-			particle.update();
-		});
-		this.fireParticles = this.fireParticles.filter(
-			(particle) => !particle.markedForDeletion
-		);
-		this.smokeParticles = this.smokeParticles.filter(
-			(particle) => !particle.markedForDeletion
-		);
-		this.smokeParticlesAK726 = this.smokeParticlesAK726.filter(
-			(particle) => !particle.markedForDeletion
-		);
-		this.shipFireParticles = this.shipFireParticles.filter(
-			(particle) => !particle.markedForDeletion
-		);
-		this.explosions.forEach((explosion) => {
-			explosion.update(context);
-			explosion.draw(context);
-		});
-		this.explosions = this.explosions.filter(
-			(explosion) => !explosion.markedForDeletion
-		);
-		if (this.ships[2].isDrawn)
-			this.checkFregataLineCollisionFirst(context, this.ships[0].missiles.p22);
-		this.ships[2].radar.update();
+		if (this.continue) {
+			if (!this.ships[2].isDrawn) this.background.update();
+			if (!this.ships[0].markedForDeletion) this.ships[0].controlNpr(context);
+			this.controlAfterFirstCollision(context);
+			// handle missile reaction
+			this.fireParticles.forEach((particle) => {
+				particle.update();
+			});
+			this.smokeParticles.forEach((particle) => {
+				particle.update();
+			});
+			this.smokeParticlesAK726.forEach((particle) => {
+				particle.update();
+			});
+			this.shipFireParticles.forEach((particle) => {
+				particle.update();
+			});
+			this.fireParticles = this.fireParticles.filter(
+				(particle) => !particle.markedForDeletion
+			);
+			this.smokeParticles = this.smokeParticles.filter(
+				(particle) => !particle.markedForDeletion
+			);
+			this.smokeParticlesAK726 = this.smokeParticlesAK726.filter(
+				(particle) => !particle.markedForDeletion
+			);
+			this.shipFireParticles = this.shipFireParticles.filter(
+				(particle) => !particle.markedForDeletion
+			);
+			this.explosions.forEach((explosion) => {
+				explosion.update(context);
+				explosion.draw(context);
+			});
+			this.explosions = this.explosions.filter(
+				(explosion) => !explosion.markedForDeletion
+			);
+			this.cloud = this.cloud.filter((cloud) => !cloud.markedForDeletion);
+			this.cloud2 = this.cloud2.filter((cloud) => !cloud.markedForDeletion);
+			if (this.ships[2].isDrawn) this.ships[2].radar.update();
+			if (this.ships[2].isDrawn)
+				this.checkFregataLineCollisionFirst(
+					context,
+					this.ships[0].missiles.p22
+				);
+			this.ships[2].radar.update();
+		} else if (!this.continue) {
+			Object.keys(this.ships[0].missiles).forEach((key) => {
+				if (!this.ships[0].missiles[key].deviat)
+					this.ships[0].missiles[key].draw(context);
+				else this.ships[0].missiles[key].drawAfterDeviation(context);
+			});
+			if (this.attackOver)
+				Object.keys(this.ships[1].missiles).forEach((key) =>
+					this.ships[1].missiles[key].draw(context)
+				);
+		}
 	}
-	initialDisplayS1(context) {
+	initialDisplay(context) {
 		this.background.draw(context);
 		this.ships[1].initialX = this.width - this.ships[1].initialWidth;
 		this.ships[1].x = this.width + this.ships[1].width;
@@ -137,11 +166,6 @@ export class Simulare {
 				this.zoomIn(context);
 				this.zoomTime += 5;
 			}
-		}
-	}
-	checkFregataLineCollisionSecond(missile) {
-		if (this.ships[2].checkArcCollision(missile, 0)) {
-			this.fregataArcCollisionsecondAttack = true;
 		}
 	}
 	zoomIn(context) {
@@ -165,7 +189,33 @@ export class Simulare {
 			btnsScenarii.style.display = 'block';
 		}, 100);
 	}
-	controlMissiles(
+	controlMissilesBeforeAttackShip0(context, missile, shipPos) {
+		if (missile && missile.x > shipPos) {
+			missile.speedX = this.speed;
+			missile.speedY = this.speed * 0.4;
+			missile.lightHeadMissile();
+			missile.x -= missile.speedX;
+			missile.y += missile.speedY;
+		} else if (missile && missile.x <= shipPos) {
+			missile.deviat = true;
+			missile.lightHead = false;
+			missile.speedX = this.speed;
+			missile.speedY = this.speed * 2;
+			missile.x -= missile.speedX;
+			missile.y += missile.speedY;
+			if (
+				missile.x <= 0 - missile.width ||
+				missile.y >= this.height + missile.height
+			)
+				missile.markedForDeletion = true;
+		}
+		Object.keys(this.ships[0].missiles).forEach((key) => {
+			if (!this.ships[0].missiles[key].deviat)
+				this.ships[0].missiles[key].draw(context);
+			else this.ships[0].missiles[key].drawAfterDeviation(context);
+		});
+	}
+	controlMissilesBeforeAttackShip1(
 		context,
 		missile,
 		shipPos,
@@ -175,8 +225,8 @@ export class Simulare {
 	) {
 		if (missile && missile.x > shipPos) {
 			missile.draw(context);
-			missile.speedX = 1;
-			missile.speedY = 0.4;
+			missile.speedX = this.speed;
+			missile.speedY = this.speed * 0.4;
 			missile.lightHeadMissile();
 			missile.x -= missile.speedX;
 			missile.y += missile.speedY;
@@ -207,32 +257,22 @@ export class Simulare {
 		}
 	}
 
-	controlAttack(context, ship) {
+	controlAttackShip0(context) {
+		const ship = this.ships[0];
 		if (ship.missiles.p21) {
-			this.controlMissiles(
+			this.controlMissilesBeforeAttackShip0(
 				context,
 				ship.missiles.p21,
-				this.ships[2].x + this.ships[2].width / 2,
-				ship.missiles.p21.x - this.ships[2].width / 3,
-				ship.missiles.p21.y - this.ships[2].height / 5,
-				this.explosionShip
+				this.ships[2].x + this.ships[2].width * 2
 			);
 		}
 		if (ship.missiles.p22) {
-			this.controlMissiles(
+			this.controlMissilesBeforeAttackShip0(
 				context,
 				ship.missiles.p22,
-				this.ships[2].x + this.ships[2].width * 2,
-				ship.missiles.p22.x,
-				ship.missiles.p22.y,
-				this.explosionMissile
+				this.ships[2].x + this.ships[2].width * 2
 			);
 		}
-		// this.controlFireAK630(
-		// 	context,
-		// 	this.ships[2].fireAK630[0],
-		// 	this.ships[2].fireAK630[1]
-		// );
 
 		if (ship.missiles.p21 && ship.missiles.p21.markedForDeletion)
 			delete ship.missiles.p21;
@@ -243,19 +283,52 @@ export class Simulare {
 			this.attackOver = true;
 		}
 	}
+
+	controlAttackShip1(context) {
+		const ship = this.ships[1];
+		if (this.attackOver) {
+			Object.keys(this.ships[1].missiles).forEach((key) => {
+				this.ships[1].missiles[key].draw(context);
+				this.ships[1].missiles[key].updateZoomed();
+			});
+		}
+		if (ship.missiles.p21) {
+			this.controlMissilesBeforeAttackShip1(
+				context,
+				ship.missiles.p21,
+				this.ships[2].x + this.ships[2].width / 2,
+				ship.missiles.p21.x - this.ships[2].width / 3,
+				ship.missiles.p21.y - this.ships[2].height / 5,
+				this.explosionShip
+			);
+		}
+		if (ship.missiles.p22) {
+			this.controlMissilesBeforeAttackShip1(
+				context,
+				ship.missiles.p22,
+				this.ships[2].x + this.ships[2].width / 2,
+				ship.missiles.p21.x - this.ships[2].width / 3,
+				ship.missiles.p22.y - this.ships[2].height / 6,
+				this.explosionShip
+			);
+		}
+
+		if (ship.missiles.p21 && ship.missiles.p21.markedForDeletion)
+			delete ship.missiles.p21;
+		if (ship.missiles.p22 && ship.missiles.p22.markedForDeletion)
+			delete ship.missiles.p22;
+	}
 	scenariu1(context) {
-		if (this.scenariu1Time) {
-			this.controlAttack(context, this.ships[0]);
-			this.controlFireAK630(
-				context,
-				this.ships[2].fireAK630[0],
-				this.ships[2].fireAK630[1]
-			);
-			this.controlFireAK726(
-				context,
-				this.ships[2].fireAK726[0],
-				this.ships[2].fireAK726[1]
-			);
+		if (this.scenariu1Time && this.continue) {
+			this.controlAttackShip0(context);
+			this.ships[2].firePK16.update(context);
+			this.ships[2].firePK16_2.update(context);
+			this.cloud.forEach((cloud) => {
+				cloud.update(context);
+			});
+			this.cloud2.forEach((cloud) => {
+				cloud.update(context);
+			});
 			if (this.attackOver) {
 				this.ships[1].updateMissilesPosition();
 				Object.keys(this.ships[1].missiles).forEach((key) => {
@@ -264,8 +337,7 @@ export class Simulare {
 					this.ships[1].missiles[key].height =
 						this.ships[1].missiles[key].zoomedHeight;
 				});
-
-				this.controlAttack(context, this.ships[1]);
+				this.controlAttackShip1(context);
 				this.controlFireAK630(
 					context,
 					this.ships[2].fireAK630[2],

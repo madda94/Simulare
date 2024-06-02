@@ -18,8 +18,8 @@ export class Fire extends Particle {
 		this.size = Math.random() * 20 + 50;
 		this.x = x;
 		this.y = y;
-		this.speedX = 1;
-		this.speedY = 1;
+		this.speedX = this.simulare.speed;
+		this.speedY = this.simulare.speed;
 		this.angle = 0;
 		this.va = Math.random() * 0.2 - 0.1;
 	}
@@ -49,8 +49,8 @@ export class Dust extends Particle {
 		this.size = Math.random() * 10 + 30;
 		this.x = this.simulare.width / 5.2;
 		this.y = this.simulare.height / 1.9;
-		this.speedX = Math.random() + 2;
-		this.speedY = Math.random() * 2 - 2;
+		this.speedX = (Math.random() + 2) * this.simulare.speed;
+		this.speedY = (Math.random() * 2 - 2) * this.simulare.speed;
 		this.color = 'rgba(78, 70, 70, 0.1)';
 	}
 	draw(context) {
@@ -84,8 +84,8 @@ export class ShipFire extends Particle {
 		this.x = this.ship.x + this.ship.width / 2 + this.ship.moveX;
 		// this.x = this.simulare.width / 2.2
 		this.y = this.simulare.height / 1.2;
-		this.speedX = Math.random() * 2 - 0.5;
-		this.speedY = Math.random() - 1;
+		this.speedX = (Math.random() * 2 - 0.5) * this.simulare.speed;
+		this.speedY = (Math.random() - 1) * this.simulare.speed;
 		this.color1 = 'rgba(255, 102, 0, 0.8)';
 		this.color2 = 'rgba(141, 141, 124, 0.5)';
 	}
@@ -107,5 +107,100 @@ export class ShipFire extends Particle {
 		this.y += this.speedY / 2;
 		this.size *= 1.01;
 		if (this.size > 60) this.markedForDeletion = true;
+	}
+}
+
+export class Cloud extends Particle {
+	constructor(simulare, x, y) {
+		super(simulare);
+		this.size = Math.random() * 10 + 10;
+		this.x = x;
+		this.y = y;
+		this.opacity = 0.4;
+		this.opacityDecrease = 0.0005;
+		this.color = `rgba(187, 205, 229, ${this.opacity})`;
+		this.timer = 0;
+		this.interval = 50;
+	}
+	draw(context) {
+		context.beginPath();
+		context.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+		context.arc(this.x - 10, this.y, this.size, 0, Math.PI * 2);
+		context.arc(this.x - 20, this.y, this.size, 0, Math.PI * 2);
+		context.arc(this.x - 30, this.y, this.size, 0, Math.PI * 2);
+		context.arc(this.x - 5, this.y - 5, this.size, 0, Math.PI * 2);
+		context.arc(this.x - 15, this.y - 5, this.size, 0, Math.PI * 2);
+		context.arc(this.x - 25, this.y - 5, this.size, 0, Math.PI * 2);
+		context.arc(this.x - 35, this.y - 5, this.size, 0, Math.PI * 2);
+		context.arc(this.x - 5, this.y + 5, this.size, 0, Math.PI * 2);
+		context.arc(this.x - 15, this.y + 5, this.size, 0, Math.PI * 2);
+		context.arc(this.x - 25, this.y + 5, this.size, 0, Math.PI * 2);
+		context.arc(this.x - 35, this.y + 5, this.size, 0, Math.PI * 2);
+		context.arc(this.x - 10, this.y + 10, this.size, 0, Math.PI * 2);
+		context.arc(this.x - 20, this.y + 10, this.size, 0, Math.PI * 2);
+		context.arc(this.x - 30, this.y + 10, this.size, 0, Math.PI * 2);
+		context.arc(this.x - 10, this.y - 10, this.size, 0, Math.PI * 2);
+		context.arc(this.x - 20, this.y - 10, this.size, 0, Math.PI * 2);
+		context.arc(this.x - 30, this.y - 10, this.size, 0, Math.PI * 2);
+		context.fillStyle = this.color;
+		context.fill();
+	}
+	update(context) {
+		this.draw(context);
+		if (this.size > 60) {
+			if (this.timer < this.interval) this.timer++;
+			else this.size *= 1.002;
+		} else this.size *= 1.007;
+		this.opacity -= this.opacityDecrease;
+		this.color = `rgba(187, 205, 229, ${this.opacity})`;
+		if (this.size > 100 || this.opacity === 0) this.markedForDeletion = true;
+	}
+}
+
+export class Cloud2 extends Particle {
+	constructor(simulare, x, y) {
+		super(simulare);
+		this.size = Math.random() * 10 + 10;
+		this.x = x;
+		this.y = y;
+		this.opacity = 0.4;
+		this.opacityDecrease = 0.0005;
+		this.timer = 0;
+		this.interval = 50;
+		this.color = `rgba(255, 153, 200, ${this.opacity})`;
+		this.markedForDeletion = false;
+	}
+	draw(context) {
+		context.beginPath();
+		context.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+		context.arc(this.x - 10, this.y, this.size, 0, Math.PI * 2);
+		context.arc(this.x - 20, this.y, this.size, 0, Math.PI * 2);
+		context.arc(this.x - 30, this.y, this.size, 0, Math.PI * 2);
+		context.arc(this.x - 5, this.y - 5, this.size, 0, Math.PI * 2);
+		context.arc(this.x - 15, this.y - 5, this.size, 0, Math.PI * 2);
+		context.arc(this.x - 25, this.y - 5, this.size, 0, Math.PI * 2);
+		context.arc(this.x - 35, this.y - 5, this.size, 0, Math.PI * 2);
+		context.arc(this.x - 5, this.y + 5, this.size, 0, Math.PI * 2);
+		context.arc(this.x - 15, this.y + 5, this.size, 0, Math.PI * 2);
+		context.arc(this.x - 25, this.y + 5, this.size, 0, Math.PI * 2);
+		context.arc(this.x - 35, this.y + 5, this.size, 0, Math.PI * 2);
+		context.arc(this.x - 10, this.y + 10, this.size, 0, Math.PI * 2);
+		context.arc(this.x - 20, this.y + 10, this.size, 0, Math.PI * 2);
+		context.arc(this.x - 30, this.y + 10, this.size, 0, Math.PI * 2);
+		context.arc(this.x - 10, this.y - 10, this.size, 0, Math.PI * 2);
+		context.arc(this.x - 20, this.y - 10, this.size, 0, Math.PI * 2);
+		context.arc(this.x - 30, this.y - 10, this.size, 0, Math.PI * 2);
+		context.fillStyle = this.color;
+		context.fill();
+	}
+	update(context) {
+		this.draw(context);
+		if (this.size > 60) {
+			if (this.timer < this.interval) this.timer++;
+			else this.size *= 1.002;
+		} else this.size *= 1.007;
+		this.opacity -= this.opacityDecrease;
+		this.color = `rgba(255, 153, 200, ${this.opacity})`;
+		if (this.size > 100 || this.opacity === 0) this.markedForDeletion = true;
 	}
 }
