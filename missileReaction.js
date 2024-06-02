@@ -204,3 +204,192 @@ export class Cloud2 extends Particle {
 		if (this.size > 100 || this.opacity === 0) this.markedForDeletion = true;
 	}
 }
+export class Cloud3 extends Particle {
+	constructor(simulare, x, y) {
+		super(simulare);
+		this.size = Math.random() * 10 + 10;
+		this.x = x;
+		this.y = y;
+		this.opacity = 0.4;
+		this.opacityDecrease = 0.0005;
+		this.timer = 0;
+		this.interval = 50;
+		this.color = `rgba(0, 153, 200, ${this.opacity})`;
+		this.markedForDeletion = false;
+	}
+	draw(context) {
+		context.beginPath();
+		context.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+		context.arc(this.x - 10, this.y, this.size, 0, Math.PI * 2);
+		context.arc(this.x - 20, this.y, this.size, 0, Math.PI * 2);
+		context.arc(this.x - 30, this.y, this.size, 0, Math.PI * 2);
+		context.arc(this.x - 5, this.y - 5, this.size, 0, Math.PI * 2);
+		context.arc(this.x - 15, this.y - 5, this.size, 0, Math.PI * 2);
+		context.arc(this.x - 25, this.y - 5, this.size, 0, Math.PI * 2);
+		context.arc(this.x - 35, this.y - 5, this.size, 0, Math.PI * 2);
+		context.arc(this.x - 5, this.y + 5, this.size, 0, Math.PI * 2);
+		context.arc(this.x - 15, this.y + 5, this.size, 0, Math.PI * 2);
+		context.arc(this.x - 25, this.y + 5, this.size, 0, Math.PI * 2);
+		context.arc(this.x - 35, this.y + 5, this.size, 0, Math.PI * 2);
+		context.arc(this.x - 10, this.y + 10, this.size, 0, Math.PI * 2);
+		context.arc(this.x - 20, this.y + 10, this.size, 0, Math.PI * 2);
+		context.arc(this.x - 30, this.y + 10, this.size, 0, Math.PI * 2);
+		context.arc(this.x - 10, this.y - 10, this.size, 0, Math.PI * 2);
+		context.arc(this.x - 20, this.y - 10, this.size, 0, Math.PI * 2);
+		context.arc(this.x - 30, this.y - 10, this.size, 0, Math.PI * 2);
+		context.fillStyle = this.color;
+		context.fill();
+	}
+	update(context) {
+		this.draw(context);
+		if (this.size > 60) {
+			if (this.timer < this.interval) this.timer++;
+			else this.size *= 1.002;
+		} else this.size *= 1.007;
+		this.opacity -= this.opacityDecrease;
+		this.color = `rgba(0, 153, 200, ${this.opacity})`;
+		if (this.size > 100 || this.opacity === 0) this.markedForDeletion = true;
+	}
+}
+
+export class Cloud4 extends Particle {
+	constructor(simulare, x, y) {
+		super(simulare);
+		this.size = Math.random() * 10 + 10;
+		this.x = x;
+		this.y = y;
+		this.opacity = 0.4;
+		this.opacityDecrease = 0.0005;
+		this.timer = 0;
+		this.interval = 50;
+		this.color = `rgba(255, 0, 200, ${this.opacity})`;
+		this.markedForDeletion = false;
+	}
+	draw(context) {
+		context.beginPath();
+		context.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+		context.arc(this.x - 10, this.y, this.size, 0, Math.PI * 2);
+		context.arc(this.x - 20, this.y, this.size, 0, Math.PI * 2);
+		context.arc(this.x - 30, this.y, this.size, 0, Math.PI * 2);
+		context.arc(this.x - 5, this.y - 5, this.size, 0, Math.PI * 2);
+		context.arc(this.x - 15, this.y - 5, this.size, 0, Math.PI * 2);
+		context.arc(this.x - 25, this.y - 5, this.size, 0, Math.PI * 2);
+		context.arc(this.x - 35, this.y - 5, this.size, 0, Math.PI * 2);
+		context.arc(this.x - 5, this.y + 5, this.size, 0, Math.PI * 2);
+		context.arc(this.x - 15, this.y + 5, this.size, 0, Math.PI * 2);
+		context.arc(this.x - 25, this.y + 5, this.size, 0, Math.PI * 2);
+		context.arc(this.x - 35, this.y + 5, this.size, 0, Math.PI * 2);
+		context.arc(this.x - 10, this.y + 10, this.size, 0, Math.PI * 2);
+		context.arc(this.x - 20, this.y + 10, this.size, 0, Math.PI * 2);
+		context.arc(this.x - 30, this.y + 10, this.size, 0, Math.PI * 2);
+		context.arc(this.x - 10, this.y - 10, this.size, 0, Math.PI * 2);
+		context.arc(this.x - 20, this.y - 10, this.size, 0, Math.PI * 2);
+		context.arc(this.x - 30, this.y - 10, this.size, 0, Math.PI * 2);
+		context.fillStyle = this.color;
+		context.fill();
+	}
+	update(context) {
+		this.draw(context);
+		if (this.size > 60) {
+			if (this.timer < this.interval) this.timer++;
+			else this.size *= 1.002;
+		} else this.size *= 1.007;
+		this.opacity -= this.opacityDecrease;
+		this.color = `rgba(255, 0, 200, ${this.opacity})`;
+		if (this.size > 100 || this.opacity === 0) this.markedForDeletion = true;
+	}
+}
+export class Cloud5 extends Particle {
+	constructor(simulare, x, y) {
+		super(simulare);
+		this.size = Math.random() * 10 + 10;
+		this.x = x;
+		this.y = y;
+		this.opacity = 0.4;
+		this.opacityDecrease = 0.0005;
+		this.timer = 0;
+		this.interval = 50;
+		this.color = `rgba(255, 153, 0, ${this.opacity})`;
+		this.markedForDeletion = false;
+	}
+	draw(context) {
+		context.beginPath();
+		context.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+		context.arc(this.x - 10, this.y, this.size, 0, Math.PI * 2);
+		context.arc(this.x - 20, this.y, this.size, 0, Math.PI * 2);
+		context.arc(this.x - 30, this.y, this.size, 0, Math.PI * 2);
+		context.arc(this.x - 5, this.y - 5, this.size, 0, Math.PI * 2);
+		context.arc(this.x - 15, this.y - 5, this.size, 0, Math.PI * 2);
+		context.arc(this.x - 25, this.y - 5, this.size, 0, Math.PI * 2);
+		context.arc(this.x - 35, this.y - 5, this.size, 0, Math.PI * 2);
+		context.arc(this.x - 5, this.y + 5, this.size, 0, Math.PI * 2);
+		context.arc(this.x - 15, this.y + 5, this.size, 0, Math.PI * 2);
+		context.arc(this.x - 25, this.y + 5, this.size, 0, Math.PI * 2);
+		context.arc(this.x - 35, this.y + 5, this.size, 0, Math.PI * 2);
+		context.arc(this.x - 10, this.y + 10, this.size, 0, Math.PI * 2);
+		context.arc(this.x - 20, this.y + 10, this.size, 0, Math.PI * 2);
+		context.arc(this.x - 30, this.y + 10, this.size, 0, Math.PI * 2);
+		context.arc(this.x - 10, this.y - 10, this.size, 0, Math.PI * 2);
+		context.arc(this.x - 20, this.y - 10, this.size, 0, Math.PI * 2);
+		context.arc(this.x - 30, this.y - 10, this.size, 0, Math.PI * 2);
+		context.fillStyle = this.color;
+		context.fill();
+	}
+	update(context) {
+		this.draw(context);
+		if (this.size > 60) {
+			if (this.timer < this.interval) this.timer++;
+			else this.size *= 1.002;
+		} else this.size *= 1.007;
+		this.opacity -= this.opacityDecrease;
+		this.color = `rgba(255, 153, 0, ${this.opacity})`;
+		if (this.size > 100 || this.opacity === 0) this.markedForDeletion = true;
+	}
+}
+export class Cloud6 extends Particle {
+	constructor(simulare, x, y) {
+		super(simulare);
+		this.size = Math.random() * 10 + 10;
+		this.x = x;
+		this.y = y;
+		this.opacity = 0.4;
+		this.opacityDecrease = 0.0005;
+		this.timer = 0;
+		this.interval = 50;
+		this.color = `rgba(150, 153, 200, ${this.opacity})`;
+		this.markedForDeletion = false;
+	}
+	draw(context) {
+		context.beginPath();
+		context.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+		context.arc(this.x - 10, this.y, this.size, 0, Math.PI * 2);
+		context.arc(this.x - 20, this.y, this.size, 0, Math.PI * 2);
+		context.arc(this.x - 30, this.y, this.size, 0, Math.PI * 2);
+		context.arc(this.x - 5, this.y - 5, this.size, 0, Math.PI * 2);
+		context.arc(this.x - 15, this.y - 5, this.size, 0, Math.PI * 2);
+		context.arc(this.x - 25, this.y - 5, this.size, 0, Math.PI * 2);
+		context.arc(this.x - 35, this.y - 5, this.size, 0, Math.PI * 2);
+		context.arc(this.x - 5, this.y + 5, this.size, 0, Math.PI * 2);
+		context.arc(this.x - 15, this.y + 5, this.size, 0, Math.PI * 2);
+		context.arc(this.x - 25, this.y + 5, this.size, 0, Math.PI * 2);
+		context.arc(this.x - 35, this.y + 5, this.size, 0, Math.PI * 2);
+		context.arc(this.x - 10, this.y + 10, this.size, 0, Math.PI * 2);
+		context.arc(this.x - 20, this.y + 10, this.size, 0, Math.PI * 2);
+		context.arc(this.x - 30, this.y + 10, this.size, 0, Math.PI * 2);
+		context.arc(this.x - 10, this.y - 10, this.size, 0, Math.PI * 2);
+		context.arc(this.x - 20, this.y - 10, this.size, 0, Math.PI * 2);
+		context.arc(this.x - 30, this.y - 10, this.size, 0, Math.PI * 2);
+		context.fillStyle = this.color;
+		context.fill();
+	}
+	update(context) {
+		this.draw(context);
+		if (this.size > 60) {
+			if (this.timer < this.interval) this.timer++;
+			else this.size *= 1.002;
+		} else this.size *= 1.007;
+		this.opacity -= this.opacityDecrease;
+		this.color = `rgba(150, 153, 200, ${this.opacity})`;
+		if (this.size > 100 || this.opacity === 0) this.markedForDeletion = true;
+	}
+}
