@@ -58,6 +58,8 @@ export class Simulare {
 			cloud.draw(context);
 		});
 	}
+
+	// dupa ce npr1 ajunge la linia rosie, rachetele se lanseaza si ecranul se deruleaza
 	controlAfterFirstCollision(context) {
 		if (this.ships[0].collisionLine <= 0) {
 			this.background.moving = true;
@@ -69,6 +71,7 @@ export class Simulare {
 				fire.draw(context);
 			});
 			if (!this.fregataArcCollisionfirstAttack)
+				// rachetele navei npr1 sunt desenate si actualizate
 				Object.keys(this.ships[0].missiles).forEach((key) => {
 					if (!this.ships[0].missiles[key].deviat)
 						this.ships[0].missiles[key].draw(context);
@@ -76,6 +79,7 @@ export class Simulare {
 					this.ships[0].missiles[key].update();
 				});
 			else if (this.fregataArcCollisionfirstAttack) {
+				// rachetele navei npr2 sunt desenate si actualizate
 				Object.keys(this.ships[0].missiles).forEach((key) => {
 					if (!this.ships[0].missiles[key].deviat)
 						this.ships[0].missiles[key].draw(context);
@@ -92,39 +96,42 @@ export class Simulare {
 			});
 		}
 	}
+	// intreaga simulare se actualizeaza
 	update(context) {
 		if (this.continue) {
+			// actualizare background
 			if (!this.ships[2].isDrawn) this.background.update();
+			// actualizare npr1
 			if (!this.ships[0].markedForDeletion) this.ships[0].controlNpr(context);
 			this.controlAfterFirstCollision(context);
-			// handle missile reaction
+			// actualizarea reactiei rachetelor la lansare
 			this.fireParticles.forEach((particle) => {
 				particle.update();
 			});
-			this.smokeParticles.forEach((particle) => {
-				particle.update();
-			});
-			this.smokeParticlesAK726.forEach((particle) => {
-				particle.update();
-			});
-			this.shipFireParticles.forEach((particle) => {
-				particle.update();
-			});
-			// this.cloud.forEach((cloud) => {
-			// 	cloud.update(context);
-			// });
 			this.fireParticles = this.fireParticles.filter(
 				(particle) => !particle.markedForDeletion
 			);
+			// actualizarea fumului rezultat de la tunuri
+			this.smokeParticles.forEach((particle) => {
+				particle.update();
+			});
 			this.smokeParticles = this.smokeParticles.filter(
 				(particle) => !particle.markedForDeletion
 			);
+			this.smokeParticlesAK726.forEach((particle) => {
+				particle.update();
+			});
 			this.smokeParticlesAK726 = this.smokeParticlesAK726.filter(
 				(particle) => !particle.markedForDeletion
 			);
+			// actualizarea reactiei pe nava rezultata la lansarea rachetelor
+			this.shipFireParticles.forEach((particle) => {
+				particle.update();
+			});
 			this.shipFireParticles = this.shipFireParticles.filter(
 				(particle) => !particle.markedForDeletion
 			);
+			// actualizare explozii
 			this.explosions.forEach((explosion) => {
 				explosion.update(context);
 				explosion.draw(context);
@@ -132,6 +139,7 @@ export class Simulare {
 			this.explosions = this.explosions.filter(
 				(explosion) => !explosion.markedForDeletion
 			);
+			// actualizarea norilor rezultati din dispersarea instalatiilor de bruiaj
 			this.cloud = this.cloud.filter((cloud) => !cloud.markedForDeletion);
 			if (this.ships[2].isDrawn) this.ships[2].radar.update();
 			if (this.ships[2].isDrawn)
@@ -141,6 +149,7 @@ export class Simulare {
 				);
 			this.ships[2].radar.update();
 		} else if (!this.continue) {
+			// desenarea rachetelor daca este apasat butonul de pauza
 			Object.keys(this.ships[0].missiles).forEach((key) => {
 				if (!this.ships[0].missiles[key].deviat)
 					this.ships[0].missiles[key].draw(context);
@@ -152,6 +161,7 @@ export class Simulare {
 				);
 		}
 	}
+	// desenarea navelor in pozitie initiala si la o scala mai mica
 	initialDisplay(context) {
 		this.background.draw(context);
 		this.ships[1].initialX = this.width - this.ships[1].initialWidth;
@@ -164,6 +174,7 @@ export class Simulare {
 		}, 100);
 	}
 	checkFregataLineCollisionFirst(context, missile) {
+		// la coliziunea rachetelor cu linia fregatei se da zoom
 		if (this.ships[2].checkArcCollision(missile)) {
 			this.fregataArcCollisionfirstAttack = true;
 			if (this.zoomTime < this.zoomInterval) {
@@ -172,6 +183,7 @@ export class Simulare {
 			}
 		}
 	}
+	// controlul navei si a rachetelor in zoom
 	zoomIn(context) {
 		this.background.marks.markDistance *= 1.2;
 		this.ships[2].radius *= 1.045;
@@ -193,6 +205,7 @@ export class Simulare {
 			btnsScenarii.style.display = 'block';
 		}, 100);
 	}
+	// controlul rachetelor navei npr1 si devierea acestora cand intra in norul de bruiaj
 	controlMissilesBeforeAttackShip0(context, missile, shipPos) {
 		if (missile && missile.x > shipPos) {
 			missile.speedX = this.speed;
@@ -219,6 +232,8 @@ export class Simulare {
 			else this.ships[0].missiles[key].drawAfterDeviation(context);
 		});
 	}
+
+	// controlul rachetelor navei npr2 si explozia acestora cand lovesc fregata
 	controlMissilesBeforeAttackShip1(
 		context,
 		missile,
@@ -245,6 +260,7 @@ export class Simulare {
 			}
 		}
 	}
+	// controlul tunurilor AK630
 	controlFireAK630(context, ak1, ak2) {
 		if (!ak1.fireStop) {
 			ak1.update(context);
@@ -252,6 +268,7 @@ export class Simulare {
 			ak2.update(context);
 		}
 	}
+	// controlul tunurilor AK726
 	controlFireAK726(context, ak1, ak2) {
 		if (!ak1.fireStop) {
 			ak1.update(context);
@@ -262,6 +279,7 @@ export class Simulare {
 		}
 	}
 
+	// controlul atacului rachetelor navei 1 asupra fregatei
 	controlAttackShip0(context) {
 		const ship = this.ships[0];
 		if (ship.missiles.p21) {
@@ -278,7 +296,7 @@ export class Simulare {
 				this.ships[2].x + this.ships[2].width * 2
 			);
 		}
-
+// daca rachetele au disparut de pe ecran, acestea vor fi sterse
 		if (ship.missiles.p21 && ship.missiles.p21.markedForDeletion)
 			delete ship.missiles.p21;
 		if (ship.missiles.p22 && ship.missiles.p22.markedForDeletion)
@@ -288,7 +306,7 @@ export class Simulare {
 			this.attackOver = true;
 		}
 	}
-
+	// controlul atacului rachetelor navei 2 asupra fregatei
 	controlAttackShip1(context) {
 		const ship = this.ships[1];
 		if (this.attackOver) {
@@ -319,7 +337,7 @@ export class Simulare {
 				this.explosionShip
 			);
 		}
-
+		// daca rachetele au disparut de pe ecran, acestea vor fi sterse
 		if (ship.missiles.p21 && ship.missiles.p21.markedForDeletion)
 			delete ship.missiles.p21;
 		if (ship.missiles.p22 && ship.missiles.p22.markedForDeletion)
@@ -327,15 +345,18 @@ export class Simulare {
 	}
 	scenariu1(context) {
 		if (this.scenariu1Time && this.continue) {
+			// controlul rachetelor navei npr1 in cadrul scenariului
 			this.controlAttackShip0(context);
+			// controlul instalatiilor de bruiaj
 			this.ships[2].firePK16.forEach((fire) => {
-				// console.log(fire);
 				fire.update(context);
 			});
+			// controlul norilor rezultati din dispersarea instalatiilor de bruiaj
 			this.cloud.forEach((cloud) => {
 				cloud.update(context);
 			});
 			if (this.attackOver) {
+				// actualizarea pozitiilor si dimensiunilor rachetelor navei npr2
 				this.ships[1].updateMissilesPosition();
 				Object.keys(this.ships[1].missiles).forEach((key) => {
 					this.ships[1].missiles[key].width =
@@ -343,18 +364,22 @@ export class Simulare {
 					this.ships[1].missiles[key].height =
 						this.ships[1].missiles[key].zoomedHeight;
 				});
+				// controlul rachetelor navei npr2 dupa ce rachetele navei npr1 au fost deviate
 				this.controlAttackShip1(context);
+				// controlul tunurilor AK630 in cadrul scenariului
 				this.controlFireAK630(
 					context,
 					this.ships[2].fireAK630[2],
 					this.ships[2].fireAK630[3]
 				);
+				// controlul tunurilor AK726 in cadrul scenariului
 				this.controlFireAK726(
 					context,
 					this.ships[2].fireAK726[2],
 					this.ships[2].fireAK726[3]
 				);
 			}
+			// daca toate rachetele au disparut de pe ecran atacul se incheie
 			if (
 				Object.keys(this.ships[0].missiles).length === 0 &&
 				Object.keys(this.ships[1].missiles).length === 0
