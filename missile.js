@@ -276,8 +276,8 @@ export class Radar {
 		this.frameY = 0;
 		this.frameCount = 0;
 		this.frameInterval = 15;
-		this.x = this.simulare.width / 7.2;
-		this.y = this.simulare.height / 2.35;
+		this.x = this.simulare.width / 7;
+		this.y = this.simulare.height / 2.45;
 	}
 	draw(context) {
 		context.drawImage(
@@ -364,13 +364,13 @@ export class FirePK16_1 extends FirePK16 {
 	constructor(simulare, x, y) {
 		super(simulare, x, y);
 		// modificare orientare linie (rotire mai spre sus sau spre jos)
-		this.rotationGrade = -Math.PI / 1.65;
+		this.rotationGrade = -Math.PI / 1.6;
 		this.numberCloud = 0;
 		this.delay = 50; // delay in milliseconds (1 second)
 		this.fireTime = 0;
 		// modificare directie si viteza
-		this.speedX = this.simulare.speed * 3;
-		this.speedY = this.simulare.speed * 1.5;
+		this.speedX = this.simulare.speed * 2.5;
+		this.speedY = this.simulare.speed * 1.3;
 	}
 	createCloud(x, y) {
 		this.simulare.cloud.unshift(new Cloud0(this.simulare, x, y));
@@ -380,13 +380,13 @@ export class FirePK16_2 extends FirePK16 {
 	constructor(simulare, x, y) {
 		super(simulare, x, y);
 		// modificare orientare linie (rotire mai spre sus sau spre jos)
-		this.rotationGrade = -Math.PI / 1.4;
+		this.rotationGrade = -Math.PI / 1.61;
 		this.numberCloud = 1;
-		this.delay = 100; // delay in milliseconds (1 second)
+		this.delay = 80; // delay in milliseconds (1 second)
 		this.fireTime = 0;
 		// modificare directie si viteza
-		this.speedX = this.simulare.speed * 3;
-		this.speedY = this.simulare.speed;
+		this.speedX = this.simulare.speed * 2.7;
+		this.speedY = this.simulare.speed* 1.5;
 	}
 	createCloud(x, y) {
 		this.simulare.cloud.unshift(new Cloud1(this.simulare, x, y));
@@ -396,13 +396,13 @@ export class FirePK16_3 extends FirePK16 {
 	constructor(simulare, x, y) {
 		super(simulare, x, y);
 		// modificare orientare linie (rotire mai spre sus sau spre jos)
-		this.rotationGrade = -Math.PI / 1.2;
+		this.rotationGrade = -Math.PI / 1.62;
 		this.numberCloud = 2;
-		this.delay = 150; // delay in milliseconds (1 second)
+		this.delay = 110; // delay in milliseconds (1 second)
 		this.fireTime = 0;
 		// modificare directie si viteza
-		this.speedX = this.simulare.speed * 2;
-		this.speedY = this.simulare.speed * 0.5;
+		this.speedX = this.simulare.speed * 3;
+		this.speedY = this.simulare.speed * 1;
 	}
 	createCloud(x, y) {
 		this.simulare.cloud.unshift(new Cloud2(this.simulare, x, y));
@@ -412,9 +412,9 @@ export class FirePK16_4 extends FirePK16 {
 	constructor(simulare, x, y) {
 		super(simulare, x, y);
 		// modificare orientare linie (rotire mai spre sus sau spre jos)
-		this.rotationGrade = -Math.PI / 1.85;
+		this.rotationGrade = -Math.PI / 1.7;
 		this.numberCloud = 3;
-		this.delay = 200; // delay in milliseconds (1 second)
+		this.delay = 140; // delay in milliseconds (1 second)
 		this.fireTime = 0;
 		// modificare directie si viteza
 		this.speedX = this.simulare.speed * 4;
@@ -428,9 +428,9 @@ export class FirePK16_5 extends FirePK16 {
 	constructor(simulare, x, y) {
 		super(simulare, x, y);
 		// modificare orientare linie (rotire mai spre sus sau spre jos)
-		this.rotationGrade = -Math.PI / 2.1;
+		this.rotationGrade = -Math.PI / 1.8;
 		this.numberCloud = 4;
-		this.delay = 250; // delay in milliseconds (1 second)
+		this.delay = 170; // delay in milliseconds (1 second)
 		this.fireTime = 0;
 		// modificare directie si viteza
 		this.speedX = this.simulare.speed * 5;
@@ -444,13 +444,13 @@ export class FirePK16_6 extends FirePK16 {
 	constructor(simulare, x, y) {
 		super(simulare, x, y);
 		// modificare orientare linie (rotire mai spre sus sau spre jos)
-		this.rotationGrade = -Math.PI / 2.3;
+		this.rotationGrade = -Math.PI / 2;
 		this.numberCloud = 5;
-		this.delay = 300; // delay in milliseconds (1 second)
+		this.delay = 200; // delay in milliseconds (1 second)
 		this.fireTime = 0;
 		// modificare directie si viteza
-		this.speedX = this.simulare.speed * 4;
-		this.speedY = this.simulare.speed * 2.5;
+		this.speedX = this.simulare.speed * 3;
+		this.speedY = this.simulare.speed * 0.8;
 	}
 	createCloud(x, y) {
 		this.simulare.cloud.unshift(new Cloud5(this.simulare, x, y));

@@ -86,8 +86,8 @@ export class ShipFire extends Particle {
 		this.y = this.simulare.height / 1.2;
 		this.speedX = (Math.random() * 2 - 0.5) * this.simulare.speed;
 		this.speedY = (Math.random() - 1) * this.simulare.speed;
-		this.color1 = 'rgba(255, 102, 0, 0.8)';
-		this.color2 = 'rgba(141, 141, 124, 0.5)';
+		this.color1 = 'rgba(255, 102, 0, 0.1)';
+		this.color2 = 'rgba(141, 141, 124, 0.3)';
 	}
 	draw(context) {
 		context.beginPath();
@@ -114,7 +114,7 @@ class Cloud extends Particle {
 	constructor(simulare, x, y) {
 		super(simulare);
 		// modificare dimensiune nor la start
-		this.size = Math.random() * 5 + 5;
+		this.size = Math.random() * 5 + 10;
 		this.x = x;
 		this.y = y;
 		this.opacity = 0.4;
@@ -151,21 +151,21 @@ export class Cloud0 extends Cloud {
 	constructor(simulare, x, y) {
 		super(simulare, x, y);
 		// modificare culoare nor (trebuie modificata si mai jos in update)
-		this.color = `rgba(187, 205, 229, ${this.opacity})`;
+		this.color = `rgba(144, 144, 144, ${this.opacity})`;
 	}
 
 	update(context) {
 		this.draw(context);
 		// modificare dimensiunea la care norul isi incetineste cresterea
-		if (this.size > 40) {
+		if (this.size > 90) {
 			if (this.timer < this.interval) this.timer++;
 			// modificare viteza cu care creste dupa acest punct
-			else this.size *= 1.002;
+			else this.size *= 1;
 		}
 		// modificare viteza cu care creste norul de la inceput
 		else this.size *= 1.007;
 		this.opacity -= this.opacityDecrease;
-		this.color = `rgba(187, 205, 229, ${this.opacity})`;
+		this.color = `rgba(144, 144, 144, ${this.opacity})`;
 		if (this.size > 100 || this.opacity === 0) this.markedForDeletion = true;
 	}
 }
@@ -173,21 +173,21 @@ export class Cloud1 extends Cloud {
 	constructor(simulare, x, y) {
 		super(simulare);
 		// modificare culoare nor (trebuie modificata si mai jos in update)
-		this.color = `rgba(0, 205, 229, ${this.opacity})`;
+		this.color = `rgba(144, 144, 144, ${this.opacity})`;
 	}
 
 	update(context) {
 		this.draw(context);
 		// modificare dimensiunea la care norul isi incetineste cresterea
-		if (this.size > 40) {
+		if (this.size > 90) {
 			if (this.timer < this.interval) this.timer++;
 			// modificare viteza cu care creste dupa acest punct
-			else this.size *= 1.002;
+			else this.size *= 1;
 		}
 		// modificare viteza cu care creste norul de la inceput
 		else this.size *= 1.007;
 		this.opacity -= this.opacityDecrease;
-		this.color = `rgba(0, 205, 229, ${this.opacity})`;
+		this.color = `rgba(144, 144, 144, ${this.opacity})`;
 		if (this.size > 100 || this.opacity === 0) this.markedForDeletion = true;
 	}
 }
@@ -195,21 +195,21 @@ export class Cloud2 extends Cloud {
 	constructor(simulare, x, y) {
 		super(simulare, x, y);
 		// modificare culoare nor (trebuie modificata si mai jos in update)
-		this.color = `rgba(187, 0, 229, ${this.opacity})`;
+		this.color = `rgba(255, 139, 74, ${this.opacity})`;
 	}
 
 	update(context) {
 		this.draw(context);
 		// modificare dimensiunea la care norul isi incetineste cresterea
-		if (this.size > 40) {
+		if (this.size > 90) {
 			if (this.timer < this.interval) this.timer++;
 			// modificare viteza cu care creste dupa acest punct
-			else this.size *= 1.002;
+			else this.size *= 1;
 		}
 		// modificare viteza cu care creste norul de la inceput
 		else this.size *= 1.007;
 		this.opacity -= this.opacityDecrease;
-		this.color = `rgba(187, 0, 229, ${this.opacity})`;
+		this.color = `rgba(255, 139, 74, ${this.opacity})`;
 		if (this.size > 100 || this.opacity === 0) this.markedForDeletion = true;
 	}
 }
@@ -218,21 +218,21 @@ export class Cloud3 extends Cloud {
 	constructor(simulare, x, y) {
 		super(simulare, x, y);
 		// modificare culoare nor (trebuie modificata si mai jos in update)
-		this.color = `rgba(187, 205, 0, ${this.opacity})`;
+		this.color = `rgba(255, 139, 74, ${this.opacity})`;
 	}
 
 	update(context) {
 		this.draw(context);
 		// modificare dimensiunea la care norul isi incetineste cresterea
-		if (this.size > 40) {
+		if (this.size > 90) {
 			if (this.timer < this.interval) this.timer++;
 			// modificare viteza cu care creste dupa acest punct
-			else this.size *= 1.002;
+			else this.size *= 0.8;
 		}
 		// modificare viteza cu care creste norul de la inceput
 		else this.size *= 1.007;
 		this.opacity -= this.opacityDecrease;
-		this.color = `rgba(187, 205, 0, ${this.opacity})`;
+		this.color = `rgba(255, 139, 74, ${this.opacity})`;
 		if (this.size > 100 || this.opacity === 0) this.markedForDeletion = true;
 	}
 }
@@ -240,21 +240,21 @@ export class Cloud4 extends Cloud {
 	constructor(simulare, x, y) {
 		super(simulare, x, y);
 		// modificare culoare nor (trebuie modificata si mai jos in update)
-		this.color = `rgba(50, 205, 229, ${this.opacity})`;
+		this.color = `rgba(144, 144, 144, ${this.opacity})`;
 	}
 
 	update(context) {
 		this.draw(context);
 		// modificare dimensiunea la care norul isi incetineste cresterea
-		if (this.size > 40) {
+		if (this.size > 90) {
 			if (this.timer < this.interval) this.timer++;
 			// modificare viteza cu care creste dupa acest punct
-			else this.size *= 1.002;
+			else this.size *= 1;
 		}
 		// modificare viteza cu care creste norul de la inceput
 		else this.size *= 1.007;
 		this.opacity -= this.opacityDecrease;
-		this.color = `rgba(50, 205, 229, ${this.opacity})`;
+		this.color = `rgba(144, 144, 144, ${this.opacity})`;
 		if (this.size > 100 || this.opacity === 0) this.markedForDeletion = true;
 	}
 }
@@ -262,21 +262,21 @@ export class Cloud5 extends Cloud {
 	constructor(simulare, x, y) {
 		super(simulare, x, y);
 		// modificare culoare nor (trebuie modificata si mai jos in update)
-		this.color = `rgba(255, 205, 229, ${this.opacity})`;
+		this.color = `rgba(144, 144, 144, ${this.opacity})`;
 	}
 
 	update(context) {
 		this.draw(context);
 		// modificare dimensiunea la care norul isi incetineste cresterea
-		if (this.size > 40) {
+		if (this.size > 90) {
 			if (this.timer < this.interval) this.timer++;
 			// modificare viteza cu care creste dupa acest punct
-			else this.size *= 1.002;
+			else this.size *= 1;
 		}
 		// modificare viteza cu care creste norul de la inceput
 		else this.size *= 1.007;
 		this.opacity -= this.opacityDecrease;
-		this.color = `rgba(255, 205, 229, ${this.opacity})`;
+		this.color = `rgba(144, 144, 144, ${this.opacity})`;
 		if (this.size > 100 || this.opacity === 0) this.markedForDeletion = true;
 	}
 }
